@@ -1,0 +1,17 @@
+.footer {
+    display: flex;
+    align-items: center;
+    border-top: var(--width-separator-thin) solid var(--color-separator);
+    padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+    .content {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        padding: var(--spacing-small);
+    }
+
+    .actions {
+        flex-shrink: 0;
+    }
+}

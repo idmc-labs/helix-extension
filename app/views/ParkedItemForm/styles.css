@@ -1,16 +1,24 @@
-.parked-item-form {
-    position: relative;
+.parking-lot-box {
+    padding: var(--spacing-extra-large);
+    width: 100vw;
+    height: 90vh;
+    --width-preview: 560px;
 
-    .form-buttons{
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        margin-top: var(--spacing-medium);
+    .parked-item-form {
+        position: relative;
 
-        .button {
-            margin-bottom: var(--spacing-small);
-            margin-left: var(--spacing-medium);
-            padding: var(--spacing-small) var(--spacing-large);
+        .input {
+            flex-basis: calc(50% - var(--dui-spacing-medium) / 2);
         }
     }
+
+    .header-style {
+        padding: var(--spacing-medium);
+    }
+}
+
+.submit-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--spacing-medium);
 }

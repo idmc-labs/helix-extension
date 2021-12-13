@@ -18,7 +18,6 @@ import {
     PartialForm,
     PurgeNull,
 } from '@togglecorp/toggle-form';
-import { ContainerCard } from '@the-deep/deep-ui';
 
 import {
     gql,
@@ -27,6 +26,7 @@ import {
 } from '@apollo/client';
 
 import Row from '#base/components/Row';
+import Container from '#base/components/Container';
 import NonFieldError from '#base/components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
 import NotificationContext from '#base/components/NotificationContext';
@@ -48,8 +48,6 @@ import {
     ParkedItemQueryVariables,
     CreateParkedItemMutation,
     CreateParkedItemMutationVariables,
-    UpdateParkedItemMutation,
-    UpdateParkedItemMutationVariables,
     Parking_Lot_Status as ParkingLotStatus,
 } from '#generated/types';
 import styles from './styles.css';
@@ -116,33 +114,6 @@ const CREATE_PARKING_LOT = gql`
     }
 `;
 
-const UPDATE_PARKING_LOT = gql`
-    mutation UpdateParkedItem($parkedItem: ParkedItemUpdateInputType!) {
-        updateParkedItem(data: $parkedItem) {
-            result {
-                comments
-                country {
-                    id
-                    idmcShortName
-                }
-                id
-                assignedTo {
-                    id
-                    fullName
-                }
-                status
-                createdBy {
-                    id
-                    fullName
-                }
-                title
-                url
-            }
-            errors
-        }
-    }
-`;
-
 type ParkedItemFormFields = CreateParkedItemMutationVariables['parkedItem'];
 type FormType = PurgeNull<PartialForm<WithId<EnumFix<ParkedItemFormFields, 'status'>>>>;
 
@@ -165,14 +136,12 @@ interface ParkedItemFormProps {
     className?: string;
     onParkedItemCreate?: (result: NonNullable<NonNullable<CreateParkedItemMutation['createParkedItem']>['result']>) => void;
     id?: string;
-    readOnly?: boolean;
 }
 
 function ParkedItemForm(props: ParkedItemFormProps) {
     const {
         onParkedItemCreate,
         id,
-        readOnly,
         className,
     } = props;
 
@@ -297,83 +266,36 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         },
     );
 
-    const [
-        updateParkedItem,
-        { loading: updateLoading },
-    ] = useMutation<UpdateParkedItemMutation, UpdateParkedItemMutationVariables>(
-        UPDATE_PARKING_LOT,
-        {
-            onCompleted: (response) => {
-                const {
-                    updateParkedItem: updateParkedItemRes,
-                } = response;
-                if (!updateParkedItemRes) {
-                    return;
-                }
-                const { errors, result } = updateParkedItemRes;
-                if (errors) {
-                    const formError = transformToFormError(removeNull(errors));
-                    notifyGQLError(errors);
-                    onErrorSet(formError);
-                }
-                if (onParkedItemCreate && result) {
-                    notify({
-                        children: 'Parked item updated successfully!',
-                        variant: 'success',
-                    });
-                    onPristineSet(true);
-                    onParkedItemCreate(result);
-                }
-            },
-            onError: (errors) => {
-                notify({
-                    children: errors.message,
-                    variant: 'error',
-                });
-                onErrorSet({
-                    $internal: errors.message,
-                });
-            },
-        },
-    );
-
     const handleSubmit = React.useCallback((finalValues: FormType) => {
-        if (finalValues.id) {
-            updateParkedItem({
-                variables: {
-                    parkedItem: finalValues as WithId<ParkedItemFormFields>,
-                },
-            });
-        } else {
-            createParkedItem({
-                variables: {
-                    parkedItem: finalValues as ParkedItemFormFields,
-                },
-            });
-        }
-    }, [createParkedItem, updateParkedItem]);
+        createParkedItem({
+            variables: {
+                parkedItem: finalValues as ParkedItemFormFields,
+            },
+        });
+    }, [createParkedItem]);
 
     // eslint-disable-next-line max-len
-    const loading = createLoading || updateLoading || parkedItemDataLoading || parkedItemOptionsLoading;
+    const loading = createLoading || parkedItemDataLoading || parkedItemOptionsLoading;
     const errored = !!parkedItemDataError || !!parkedItemOptionsError;
     const disabled = loading || errored;
 
     return (
-        <ContainerCard
-            className={_cs(className, styles.leadUrlBox)}
-            heading="Add lead"
-            borderBelowHeader
+        <Container
+            className={_cs(className, styles.parkingLotBox)}
+            heading="Add Parked Item"
+            headerClassName={styles.headerStyle}
             footerActions={(
-                <Button
-                    name="save"
-                    type="submit"
-                    variant="primary"
-                    // FIXME: Add disabled during pristine later
-                    disabled={!readOnly}
-                    onClick={handleSubmit}
-                >
-                    Submit
-                </Button>
+                <div className={styles.submitButton}>
+                    <Button
+                        type="submit"
+                        name={undefined}
+                        disabled={disabled || pristine}
+                        variant="primary"
+                        onClick={handleSubmit}
+                    >
+                        Submit
+                    </Button>
+                </div>
             )}
         >
             <form
@@ -386,17 +308,18 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 </NonFieldError>
                 <Row>
                     <TextInput
+                        className={styles.input}
                         label="Title *"
                         name="title"
                         value={value.title}
                         onChange={onValueChange}
                         error={error?.fields?.title}
                         disabled={disabled}
-                        readOnly={readOnly}
                     />
                 </Row>
                 <Row>
                     <TextInput
+                        className={styles.input}
                         label="URL *"
                         name="url"
                         value={value.url}
@@ -407,6 +330,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 </Row>
                 <Row>
                     <CountrySelectInput
+                        className={styles.input}
                         label="Country *"
                         options={countryOptions}
                         name="country"
@@ -419,6 +343,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 </Row>
                 <Row>
                     <UserSelectInput
+                        className={styles.input}
                         label="Assignee *"
                         options={assignedToOptions}
                         name="assignedTo"
@@ -431,6 +356,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 </Row>
                 <Row>
                     <SelectInput
+                        className={styles.input}
                         label="Status *"
                         name="status"
                         options={statusOptions}
@@ -444,30 +370,17 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 </Row>
                 <Row>
                     <TextArea
+                        className={styles.input}
                         label="Comments"
                         name="comments"
                         value={value.comments}
                         onChange={onValueChange}
                         disabled={disabled}
                         error={error?.fields?.comments}
-                        readOnly={readOnly}
                     />
                 </Row>
-                {/* {!readOnly && (
-                    <div className={styles.formButtons}>
-                        <Button
-                            type="submit"
-                            name={undefined}
-                            disabled={disabled || pristine}
-                            variant="primary"
-                            className={styles.button}
-                        >
-                            Submit
-                        </Button>
-                    </div>
-                )} */}
             </form>
-        </ContainerCard>
+        </Container>
     );
 }
 

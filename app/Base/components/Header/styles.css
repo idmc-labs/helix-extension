@@ -1,0 +1,18 @@
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: var(--width-separator-thin) solid var(--color-separator);
+    padding: calc(var(--spacing-medium) - var(--spacing-small));
+
+    .icons {
+        flex-shrink: 0;
+    }
+
+    .heading {
+        flex-grow: 1;
+    }
+
+    .actions {
+        flex-shrink: 0;
+    }
+}

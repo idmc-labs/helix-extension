@@ -2,17 +2,6 @@ import { lazy } from 'react';
 
 import { wrap } from '#base/utils/routes';
 
-const fourHundredFour = wrap({
-    path: '*',
-    title: '404',
-    component: lazy(() => import('#base/components/PreloadMessage')),
-    componentProps: {
-        heading: '404',
-        content: 'What you are looking for does not exist.',
-    },
-    visibility: 'is-anything',
-    navbarVisibility: true,
-});
 const login = wrap({
     path: '/login/',
     title: 'Login',
@@ -23,16 +12,26 @@ const login = wrap({
     },
     visibility: 'is-not-authenticated',
 });
+
+const index = wrap({
+    // NOTE: the first url is /index.html for addons
+    path: '/index.html',
+    title: 'index',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/ParkedItemForm')),
+    componentProps: {},
+    visibility: 'is-authenticated',
+});
+
 const home = wrap({
     path: '/',
     title: 'Home',
     navbarVisibility: true,
-    component: lazy(() => import('#views/Template')),
-    componentProps: {
-        name: 'Home Page',
-    },
+    component: lazy(() => import('#views/ParkedItemForm')),
+    componentProps: {},
     visibility: 'is-authenticated',
 });
+
 const myProfile = wrap({
     path: '/my-profile/',
     title: 'My Profile',
@@ -44,10 +43,43 @@ const myProfile = wrap({
     visibility: 'is-authenticated',
 });
 
+const successForm = wrap({
+    path: '/success/',
+    title: 'Success Submission',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/SuccessForm')),
+    componentProps: {},
+    visibility: 'is-authenticated',
+});
+
+const failureForm = wrap({
+    path: '/failure/',
+    title: 'Failure Submission',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/FailureForm')),
+    componentProps: {},
+    visibility: 'is-authenticated',
+});
+
+const fourHundredFour = wrap({
+    path: '*',
+    title: '404',
+    component: lazy(() => import('#base/components/PreloadMessage')),
+    componentProps: {
+        heading: '404',
+        content: 'What you are looking for does not exist.',
+    },
+    visibility: 'is-anything',
+    navbarVisibility: true,
+});
+
 const routes = {
+    index,
     login,
     home,
     myProfile,
     fourHundredFour,
+    successForm,
+    failureForm,
 };
 export default routes;

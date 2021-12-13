@@ -37,7 +37,8 @@
         "@sentry/tracing": "^6.9.0",
         "@the-deep/deep-ui": "^1.5.12",
         "@togglecorp/fujs": "^1.9.2",
-        "@togglecorp/toggle-form": "^1.2.1",
+        "@togglecorp/toggle-ui": "^0.13.2",
+        "@togglecorp/toggle-form": "^0.2.0-beta.6",
         "apollo-link": "^1.2.14",
         "apollo-link-batch-http": "^1.2.14",
         "apollo-link-rest": "^0.8.0-beta.0",
@@ -49,7 +50,11 @@
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-ga": "^3.3.0",
-        "react-icons": "^4.3.1"
+        "react-icons": "^4.3.1",
+        "@turf/bbox": "^6.0.1",
+        "@turf/bbox-polygon": "^6.0.1",
+        "@turf/combine": "^6.0.1",
+        "turf-featurecollection": "^1.0.1"
     },
     "devDependencies": {
         "@babel/core": "^7.13.10",

@@ -29,7 +29,7 @@ import Row from '#base/components/Row';
 import Container from '#base/components/Container';
 import NonFieldError from '#base/components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
-import NotificationContext from '#base/components/NotificationContext';
+import NotificationContext from '#base/context/NotificationContext';
 import UserSelectInput, { UserOption } from '#base/components/selections/UserSelectInput';
 import Loading from '#base/components/Loading';
 
@@ -134,13 +134,11 @@ const schema: FormSchema = {
 
 interface ParkedItemFormProps {
     className?: string;
-    onParkedItemCreate?: (result: NonNullable<NonNullable<CreateParkedItemMutation['createParkedItem']>['result']>) => void;
     id?: string;
 }
 
 function ParkedItemForm(props: ParkedItemFormProps) {
     const {
-        onParkedItemCreate,
         id,
         className,
     } = props;
@@ -236,6 +234,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 const {
                     createParkedItem: createParkedItemRes,
                 } = response;
+                console.log('REsponse of parked request::>>', createParkedItemRes);
                 if (!createParkedItemRes) {
                     return;
                 }
@@ -245,13 +244,12 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                     notifyGQLError(errors);
                     onErrorSet(formError);
                 }
-                if (onParkedItemCreate && result) {
+                if (result) {
                     notify({
                         children: 'Parked item created successfully!',
                         variant: 'success',
                     });
                     onPristineSet(true);
-                    onParkedItemCreate(result);
                 }
             },
             onError: (errors) => {
@@ -284,19 +282,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
             className={_cs(className, styles.parkingLotBox)}
             heading="Add Parked Item"
             headerClassName={styles.headerStyle}
-            footerActions={(
-                <div className={styles.submitButton}>
-                    <Button
-                        type="submit"
-                        name={undefined}
-                        disabled={disabled || pristine}
-                        variant="primary"
-                        onClick={handleSubmit}
-                    >
-                        Submit
-                    </Button>
-                </div>
-            )}
         >
             <form
                 className={_cs(className, styles.parkedItemForm)}
@@ -379,6 +364,17 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                         error={error?.fields?.comments}
                     />
                 </Row>
+
+                <div className={styles.submitButton}>
+                    <Button
+                        type="submit"
+                        name={undefined}
+                        disabled={disabled || pristine}
+                        variant="primary"
+                    >
+                        Submit
+                    </Button>
+                </div>
             </form>
         </Container>
     );

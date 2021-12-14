@@ -54,7 +54,8 @@
         "react-dom": "^17.0.2",
         "react-ga": "^3.3.0",
         "react-icons": "^4.3.1",
-        "turf-featurecollection": "^1.0.1"
+        "turf-featurecollection": "^1.0.1",
+        "uuid": "^8.3.2"
     },
     "devDependencies": {
         "@babel/core": "^7.13.10",

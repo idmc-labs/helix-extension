@@ -40,9 +40,6 @@
         "@togglecorp/fujs": "^1.9.2",
         "@togglecorp/toggle-form": "^0.2.0-beta.6",
         "@togglecorp/toggle-ui": "^0.13.2",
-        "@turf/bbox": "^6.0.1",
-        "@turf/bbox-polygon": "^6.0.1",
-        "@turf/combine": "^6.0.1",
         "apollo-link": "^1.2.14",
         "apollo-link-batch-http": "^1.2.14",
         "apollo-link-rest": "^0.8.0-beta.0",
@@ -55,7 +52,6 @@
         "react-dom": "^17.0.2",
         "react-ga": "^3.3.0",
         "react-icons": "^4.3.1",
-        "turf-featurecollection": "^1.0.1",
         "uuid": "^8.3.2"
     },
     "devDependencies": {
@@ -120,10 +116,10 @@
         "stylelint-webpack-plugin": "^2.2.2",
         "terser-webpack-plugin": "^5.1.4",
         "typescript": "^4.3.5",
-        "webpack-extension-manifest-plugin": "^0.8.0",
         "webpack": "^5.27.0",
         "webpack-cli": "^4.5.0",
         "webpack-dev-server": "^3.11.2",
+        "webpack-extension-manifest-plugin": "^0.8.0",
         "webpack-merge": "^5.8.0",
         "workbox-webpack-plugin": "^6.1.5"
     }

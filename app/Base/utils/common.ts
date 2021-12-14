@@ -1,13 +1,6 @@
 import ReactDOMServer from 'react-dom/server';
-import bbox from '@turf/bbox';
-import bboxPolygon from '@turf/bbox-polygon';
-import combine from '@turf/combine';
-import featureCollection from 'turf-featurecollection';
 import {
     isValidUrl as isValidRemoteUrl,
-    isFalsyString,
-    caseInsensitiveSubmatch,
-    compareStringSearch,
 } from '@togglecorp/fujs';
 import {
     BasicEntity,
@@ -57,15 +50,6 @@ export function listToMap<T, K extends string | number, V>(
     return val;
 }
 
-type Bounds = [number, number, number, number];
-export function mergeBbox(bboxes: GeoJSON.BBox[]) {
-    const boundsFeatures = bboxes.map((b) => bboxPolygon(b));
-    const boundsFeatureCollection = featureCollection(boundsFeatures);
-    const combinedPolygons = combine(boundsFeatureCollection);
-    const maxBounds = bbox(combinedPolygons);
-    return maxBounds as Bounds;
-}
-
 // FIXME: use NonNullableRec
 // FIXME: move this to types/index.tsx
 // NOTE: converts enum to string
@@ -86,22 +70,4 @@ export type WithId<T extends object> = T & { id: string };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function isChildNull(children: any) {
     return !ReactDOMServer.renderToStaticMarkup(children);
-}
-
-export function rankedSearchOnList<T>(
-    list: T[],
-    searchString: string | undefined,
-    labelSelector: (item: T) => string,
-) {
-    if (isFalsyString(searchString)) {
-        return list;
-    }
-
-    return list
-        .filter((option) => caseInsensitiveSubmatch(labelSelector(option), searchString))
-        .sort((a, b) => compareStringSearch(
-            labelSelector(a),
-            labelSelector(b),
-            searchString,
-        ));
 }

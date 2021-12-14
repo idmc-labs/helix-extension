@@ -27,7 +27,7 @@ function FailureForm(props: FailureFormInterface) {
             </p>
             <h1 className={styles.reverseButton}>
                 <Link
-                    to={route.index.path}
+                    to={route.home.path}
                 >
                     <IoArrowBackCircleSharp />
                 </Link>

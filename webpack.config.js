@@ -4,17 +4,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { HotModuleReplacementPlugin, EnvironmentPlugin } = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const { GitRevisionPlugin } = require('git-revision-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
+const WebpackExtensionManifest = require('webpack-extension-manifest-plugin');
 const { merge } = require('webpack-merge');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const ResourceHintWebpackPlugin = require('resource-hints-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const pkg = require('./package.json');
 
@@ -23,6 +22,20 @@ function getPath(value) {
 }
 
 const gitRevisionPlugin = new GitRevisionPlugin();
+
+const base = {
+    manifest_version: 2,
+    browser_action: {
+        default_popup: 'index.html',
+    },
+    content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self';",
+    permissions: ['storage'],
+    icons: {
+        32: 'icons/logo-32.png',
+        64: 'icons/logo-64.png',
+        128: 'icons/logo-128.png',
+    },
+};
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -150,29 +163,27 @@ module.exports = () => {
                 filename: 'index.html',
                 title: pkg.name,
                 meta: {
-                    charset: 'UTF-8',
-                    viewport: 'width=device-width, initial-scale=1.0',
+                    viewport: 'width=device-width, initial-scale=1.0, shrink-to-fit=no',
                     description: pkg.description,
                     referrer: 'origin',
                 },
             }),
-            new WebpackPwaManifest({
-                name: pkg.name,
-                short_name: pkg.name,
-                description: pkg.description,
-                orientation: 'landscape',
-                // background_color: '#f0f0f0',
-                // theme_color: '#303f9f',
-                display: 'standalone',
-                start_url: '/',
-                scope: '/',
-                icons: [
-                    {
-                        src: getPath('app/favicon.png'),
-                        sizes: [96, 128, 192, 256, 384, 512],
-                        destination: 'icons',
+            new CopyPlugin({
+                patterns: [{
+                    from: getPath('app/icons/'),
+                    to: 'icons/',
+                }],
+            }),
+            new WebpackExtensionManifest({
+                config: {
+                    base,
+                    extend: {
+                        name: pkg.name,
+                        description: pkg.description,
+                        author: pkg.author,
+                        version: pkg.version,
                     },
-                ],
+                },
             }),
             new CircularDependencyPlugin({
                 exclude: /node_modules/,
@@ -186,7 +197,7 @@ module.exports = () => {
             }),
             new ESLintPlugin({
                 extensions: ['.js', '.jsx', '.ts', '.tsx'],
-                reportUnusedDisableDirectives: "warn",
+                reportUnusedDisableDirectives: 'warn',
             }),
         ],
     };
@@ -226,25 +237,6 @@ module.exports = () => {
                 },
                 plugins: [
                     new ResourceHintWebpackPlugin(),
-                    new CompressionPlugin(),
-                    new WorkboxWebpackPlugin.GenerateSW({
-                        // these options encourage the ServiceWorkers to get in there fast
-                        // and not allow any straggling "old" SWs to hang around
-                        cleanupOutdatedCaches: true,
-                        clientsClaim: true,
-                        skipWaiting: true,
-                        include: [/\.html$/, /\.js$/, /\.css$/],
-                        navigateFallback: '/index.html',
-                        navigateFallbackDenylist: [/^\/icons/, /^\/assets/, /^\/api/, /^\/graphql/, /^\/graphiql/],
-                        maximumFileSizeToCacheInBytes: 500 * 1024,
-                        runtimeCaching: [
-                            {
-                                urlPattern: /assets/,
-                                handler: 'StaleWhileRevalidate',
-                            },
-                        ],
-                        exclude: [/\.map$/, /\.map.gz$/, /index.html/, /index.html.gz/],
-                    }),
                 ],
             },
         );

@@ -23,7 +23,7 @@ function SuccessForm(props: SuccessFormInterface) {
             </h1>
             <h1 className={styles.reverseButton}>
                 <Link
-                    to={route.index.path}
+                    to={route.home.path}
                 >
                     <IoArrowBackCircleSharp />
                 </Link>

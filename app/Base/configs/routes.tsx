@@ -13,18 +13,9 @@ const login = wrap({
     visibility: 'is-not-authenticated',
 });
 
-const index = wrap({
+const home = wrap({
     // NOTE: the first url is /index.html for addons
     path: '/index.html',
-    title: 'index',
-    navbarVisibility: true,
-    component: lazy(() => import('#views/ParkedItemForm')),
-    componentProps: {},
-    visibility: 'is-authenticated',
-});
-
-const home = wrap({
-    path: '/',
     title: 'Home',
     navbarVisibility: true,
     component: lazy(() => import('#views/ParkedItemForm')),
@@ -74,7 +65,6 @@ const fourHundredFour = wrap({
 });
 
 const routes = {
-    index,
     login,
     home,
     myProfile,

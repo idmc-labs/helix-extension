@@ -24,6 +24,7 @@ import {
     useQuery,
     useMutation,
 } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 
 import Row from '#base/components/Row';
 import Container from '#base/components/Container';
@@ -32,6 +33,7 @@ import CountrySelectInput, { CountryOption } from '#base/components/selections/C
 import NotificationContext from '#base/context/NotificationContext';
 import UserSelectInput, { UserOption } from '#base/components/selections/UserSelectInput';
 import Loading from '#base/components/Loading';
+import routes from '#base/configs/routes';
 
 import { transformToFormError } from '#base/utils/errorTransform';
 
@@ -143,6 +145,8 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         className,
     } = props;
 
+    const history = useHistory();
+
     const [
         countryOptions,
         setCountryOptions,
@@ -234,7 +238,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 const {
                     createParkedItem: createParkedItemRes,
                 } = response;
-                console.log('REsponse of parked request::>>', createParkedItemRes);
                 if (!createParkedItemRes) {
                     return;
                 }
@@ -245,14 +248,12 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                     onErrorSet(formError);
                 }
                 if (result) {
-                    notify({
-                        children: 'Parked item created successfully!',
-                        variant: 'success',
-                    });
                     onPristineSet(true);
+                    history.push(routes.successForm.path);
                 }
             },
             onError: (errors) => {
+                history.push(routes.failureForm.path);
                 notify({
                     children: errors.message,
                     variant: 'error',
@@ -272,7 +273,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         });
     }, [createParkedItem]);
 
-    // eslint-disable-next-line max-len
     const loading = createLoading || parkedItemDataLoading || parkedItemOptionsLoading;
     const errored = !!parkedItemDataError || !!parkedItemOptionsError;
     const disabled = loading || errored;

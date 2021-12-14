@@ -11,6 +11,11 @@
         font-weight: var(--font-weight-bold);
     }
 
+    .reverse-button {
+        width: 40px;
+        height: 40px;
+    }
+
     .message {
         margin: var(--spacing-large) 0;
         text-align: center;

@@ -6,9 +6,14 @@
     justify-content: center;
 
     .success-heading {
-        color: var(--color-danger);
+        color: var(--color-success);
         font-size: var(--font-size-super-large-alt);
         font-weight: var(--font-weight-bold);
+    }
+
+    .reverse-button {
+        width: 40px;
+        height: 40px;
     }
 
     /* .message {

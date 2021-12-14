@@ -18,10 +18,10 @@ function SuccessForm(props: SuccessFormInterface) {
     return (
         <div className={_cs(className, styles.successForm)}>
             <h1 className={styles.successHeading}>
-                Lead created successfully!
+                Parked item created successfully!
                 <IoCheckmarkCircle />
             </h1>
-            <h1 className={styles.successHeading}>
+            <h1 className={styles.reverseButton}>
                 <Link
                     to={route.index.path}
                 >

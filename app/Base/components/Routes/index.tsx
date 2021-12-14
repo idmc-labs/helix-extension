@@ -46,6 +46,18 @@ function Routes(props: Props) {
                 </Route>
                 <Route
                     exact
+                    path={routes.successForm.path}
+                >
+                    {routes.successForm.load({ className })}
+                </Route>
+                <Route
+                    exact
+                    path={routes.failureForm.path}
+                >
+                    {routes.failureForm.load({ className })}
+                </Route>
+                <Route
+                    exact
                     path={routes.fourHundredFour.path}
                 >
                     {routes.fourHundredFour.load({ className })}

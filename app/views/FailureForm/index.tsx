@@ -23,9 +23,9 @@ function FailureForm(props: FailureFormInterface) {
                 Failure
             </h1>
             <p className={styles.message}>
-                Sorry, leads could not be created at the moment !
+                Sorry, parked item could not be created at the moment !
             </p>
-            <h1 className={styles.failureHeading}>
+            <h1 className={styles.reverseButton}>
                 <Link
                     to={route.index.path}
                 >

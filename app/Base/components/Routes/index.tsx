@@ -15,7 +15,7 @@ function Routes(props: Props) {
             fallback={(
                 <PreloadMessage
                     className={className}
-                    content="Loading page..."
+                    content="Loading content..."
                 />
             )}
         >

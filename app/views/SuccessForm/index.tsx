@@ -16,18 +16,19 @@ function SuccessForm(props: SuccessFormInterface) {
     } = props;
 
     return (
-        <div className={_cs(className, styles.successForm)}>
-            <h1 className={styles.successHeading}>
-                Parked item created successfully!
+        <div className={_cs(className, styles.successPage)}>
+            <div className={styles.successHeading}>
+                Parked Item created successfully!
+                &nbsp;
                 <IoCheckmarkCircle />
-            </h1>
-            <h1 className={styles.reverseButton}>
+            </div>
+            <div className={styles.backButton}>
                 <Link
                     to={route.home.path}
                 >
                     <IoArrowBackCircleSharp />
                 </Link>
-            </h1>
+            </div>
         </div>
     );
 }

@@ -19,6 +19,7 @@ interface Props {
     descriptionClassName?: string;
     footerContent?: React.ReactNode;
     footerActions?: React.ReactNode;
+    footerClassName?: string;
     compact?: boolean;
 }
 
@@ -36,6 +37,7 @@ function Container(props: Props) {
         descriptionClassName,
         footerContent,
         footerActions,
+        footerClassName,
         compact,
     } = props;
 
@@ -67,7 +69,7 @@ function Container(props: Props) {
             </div>
             <Footer
                 actions={footerActions}
-                className={styles.footer}
+                className={_cs(styles.footer, footerClassName)}
             >
                 {footerContent}
             </Footer>

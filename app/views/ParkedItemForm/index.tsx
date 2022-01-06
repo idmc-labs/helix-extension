@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useMemo, useCallback } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import {
     TextInput,
@@ -25,8 +25,11 @@ import {
     useMutation,
 } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
+import { IoCloseCircle } from 'react-icons/io5';
 
 import Row from '#base/components/Row';
+import Svg from '#base/components/Svg';
+import Logo from '#base/resources/img/logo.svg';
 import Container from '#base/components/Container';
 import NonFieldError from '#base/components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
@@ -265,13 +268,18 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         },
     );
 
-    const handleSubmit = React.useCallback((finalValues: FormType) => {
+    const handleSubmit = useCallback((finalValues: FormType) => {
+        console.log('Handle Submit triggered::>>');
         createParkedItem({
             variables: {
                 parkedItem: finalValues as ParkedItemFormFields,
             },
         });
     }, [createParkedItem]);
+
+    const handleCloseExtension = useCallback(() => {
+        window.close();
+    }, []);
 
     const loading = createLoading || parkedItemDataLoading || parkedItemOptionsLoading;
     const errored = !!parkedItemDataError || !!parkedItemOptionsError;
@@ -280,7 +288,21 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     return (
         <Container
             className={_cs(className, styles.parkingLotBox)}
-            heading="Add Parked Item"
+            heading={(
+                <>
+                    <div className={styles.headerComponent}>
+                        <div>
+                            <Svg
+                                src={Logo}
+                                className={styles.logoPart}
+                            />
+                        </div>
+                        <div className={styles.parkedName}>
+                            Add Parked Item
+                        </div>
+                    </div>
+                </>
+            )}
             headerClassName={styles.headerStyle}
         >
             <form
@@ -365,7 +387,15 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                     />
                 </Row>
 
-                <div className={styles.submitButton}>
+                <div className={styles.footerButtons}>
+                    <Button
+                        name={undefined}
+                        onClick={handleCloseExtension}
+                        variant="primary"
+                        icons={<IoCloseCircle />}
+                    >
+                        Close
+                    </Button>
                     <Button
                         type="submit"
                         name={undefined}

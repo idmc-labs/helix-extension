@@ -29,7 +29,13 @@ const base = {
         default_popup: 'index.html',
     },
     content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self';",
-    permissions: ['storage'],
+    permissions: [
+        'storage',
+        'cookies',
+        'activeTab',
+        'tabs',
+        '<all_urls>',
+    ],
     icons: {
         32: 'icons/logo-32.png',
         64: 'icons/logo-64.png',

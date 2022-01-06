@@ -61,7 +61,7 @@ const fourHundredFour = wrap({
         content: 'What you are looking for does not exist.',
     },
     visibility: 'is-anything',
-    navbarVisibility: true,
+    navbarVisibility: false,
 });
 
 const routes = {

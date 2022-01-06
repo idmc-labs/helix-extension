@@ -2,23 +2,42 @@
     padding: var(--spacing-extra-large);
     width: 100vw;
     height: 90vh;
-    --width-preview: 560px;
 
     .parked-item-form {
         position: relative;
+        padding-left: var(--tui-spacing-large);
 
         .input {
-            flex-basis: calc(50% - var(--dui-spacing-medium) / 2);
+            flex-basis: calc(50% - var(--tui-spacing-medium) / 2);
         }
     }
 
     .header-style {
         padding: var(--spacing-medium);
     }
+
+    .header-component {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        justify-content: space-between;
+        width: 100%;
+        color: var(--tui-color-brand);
+
+        .logo-part {
+            height: var(--tui-font-size-ultra-large);
+        }
+
+        .parked-name {
+            font-size: var(--tui-font-size);
+        }
+
+    }
 }
 
-.submit-button {
+.footer-buttons {
     display: flex;
     justify-content: flex-end;
     padding: var(--spacing-medium);
+    gap: var(--spacing-medium);
 }

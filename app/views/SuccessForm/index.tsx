@@ -1,8 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { _cs } from '@togglecorp/fujs';
+import { Message, Button } from '@togglecorp/toggle-ui';
 import { IoCheckmarkCircle, IoArrowBackCircleSharp } from 'react-icons/io5';
-import route from '../../Base/configs/routes';
+
+import { useHistory } from 'react-router-dom';
+import Logo from '#base/components/Logo';
+import route from '#base/configs/routes';
 
 import styles from './styles.css';
 
@@ -15,21 +18,41 @@ function SuccessForm(props: SuccessFormInterface) {
         className,
     } = props;
 
+    const history = useHistory();
+
+    const handleBackButton = () => {
+        history.push(route.home.path);
+    };
+
     return (
-        <div className={_cs(className, styles.successPage)}>
-            <div className={styles.successHeading}>
-                Parked Item created successfully!
-                &nbsp;
-                <IoCheckmarkCircle />
-            </div>
-            <div className={styles.backButton}>
-                <Link
-                    to={route.home.path}
+        <Message
+            className={_cs(className, styles.messageBox)}
+            message={(
+                <>
+                    <p>
+                        <IoCheckmarkCircle />
+                        &nbsp;
+                        Parked Item created successfully!
+                    </p>
+                </>
+            )}
+            icon={(
+                <Logo
+                    size="large"
+                    variant="default"
+                />
+            )}
+            actions={(
+                <Button
+                    name={undefined}
+                    onClick={handleBackButton}
+                    variant="primary"
+                    icons={<IoArrowBackCircleSharp />}
                 >
-                    <IoArrowBackCircleSharp />
-                </Link>
-            </div>
-        </div>
+                    Go Back
+                </Button>
+            )}
+        />
     );
 }
 

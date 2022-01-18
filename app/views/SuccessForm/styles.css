@@ -1,22 +1,4 @@
-.success-page {
+.message-box {
     display: flex;
-    align-items: stretch;
-    flex-direction: column;
     justify-content: center;
-    color: white;
-    font-size: var(--font-size-extra-large);
-
-    .back-button {
-        display: flex;
-        justify-content: center;
-        font-size: xx-large;
-    }
-
-    .success-heading {
-        display: flex;
-        justify-content: center;
-        background-color: green;
-        padding: var(--dui-spacing-medium);
-        font-size: x-large;
-    }
 }

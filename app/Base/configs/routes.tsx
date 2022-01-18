@@ -6,10 +6,8 @@ const login = wrap({
     path: '/login/',
     title: 'Login',
     navbarVisibility: false,
-    component: lazy(() => import('#views/Template')),
-    componentProps: {
-        name: 'Login Page',
-    },
+    component: lazy(() => import('#views/Login')),
+    componentProps: {},
     visibility: 'is-not-authenticated',
 });
 
@@ -20,17 +18,6 @@ const home = wrap({
     navbarVisibility: true,
     component: lazy(() => import('#views/ParkedItemForm')),
     componentProps: {},
-    visibility: 'is-authenticated',
-});
-
-const myProfile = wrap({
-    path: '/my-profile/',
-    title: 'My Profile',
-    navbarVisibility: true,
-    component: lazy(() => import('#views/Template')),
-    componentProps: {
-        name: 'My Profile Page',
-    },
     visibility: 'is-authenticated',
 });
 
@@ -67,7 +54,6 @@ const fourHundredFour = wrap({
 const routes = {
     login,
     home,
-    myProfile,
     fourHundredFour,
     successForm,
     failureForm,

@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { _cs } from '@togglecorp/fujs';
+import { Message, Button } from '@togglecorp/toggle-ui';
 import { IoIosCloseCircle } from 'react-icons/io';
 import { IoArrowBackCircleSharp } from 'react-icons/io5';
-import route from '../../Base/configs/routes';
+
+import { useHistory } from 'react-router-dom';
+import Logo from '#base/components/Logo';
+import route from '#base/configs/routes';
 
 import styles from './styles.css';
 
@@ -16,23 +19,41 @@ function FailureForm(props: FailureFormInterface) {
         className,
     } = props;
 
+    const history = useHistory();
+
+    const handleBackButton = () => {
+        history.push(route.home.path);
+    };
+
     return (
-        <div className={_cs(className, styles.failureForm)}>
-            <h1 className={styles.failureHeading}>
-                <IoIosCloseCircle />
-                Failure
-            </h1>
-            <p className={styles.message}>
-                Sorry, parked item could not be created at the moment !
-            </p>
-            <h1 className={styles.reverseButton}>
-                <Link
-                    to={route.home.path}
+        <Message
+            className={_cs(className, styles.messageBox)}
+            message={(
+                <>
+                    <p>
+                        <IoIosCloseCircle />
+                        &nbsp;
+                        Sorry parked item could not be created at the moment!
+                    </p>
+                </>
+            )}
+            icon={(
+                <Logo
+                    size="large"
+                    variant="default"
+                />
+            )}
+            actions={(
+                <Button
+                    name={undefined}
+                    onClick={handleBackButton}
+                    variant="primary"
+                    icons={<IoArrowBackCircleSharp />}
                 >
-                    <IoArrowBackCircleSharp />
-                </Link>
-            </h1>
-        </div>
+                    Go Back
+                </Button>
+            )}
+        />
     );
 }
 

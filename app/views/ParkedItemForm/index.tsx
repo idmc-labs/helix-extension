@@ -5,6 +5,7 @@ import {
     SelectInput,
     Button,
     TextArea,
+    Message,
 } from '@togglecorp/toggle-ui';
 import {
     removeNull,
@@ -28,17 +29,18 @@ import { useHistory } from 'react-router-dom';
 import { IoCloseCircle } from 'react-icons/io5';
 
 import Row from '#base/components/Row';
-import Svg from '#base/components/Svg';
-import Logo from '#base/resources/img/logo.svg';
 import Container from '#base/components/Container';
+import user from '#base/context/UserContext';
+import Svg from '#base/components/Svg';
 import NonFieldError from '#base/components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
 import NotificationContext from '#base/context/NotificationContext';
 import UserSelectInput, { UserOption } from '#base/components/selections/UserSelectInput';
 import Loading from '#base/components/Loading';
 import routes from '#base/configs/routes';
-
-import { transformToFormError } from '#base/utils/errorTransform';
+import Logo from '#base/components/Logo';
+import HelixSvg from '#base/resources/img/logo.svg';
+import { transformToFormError, ObjectError } from '#base/utils/errorTransform';
 
 import {
     enumKeySelector,
@@ -246,7 +248,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 }
                 const { errors, result } = createParkedItemRes;
                 if (errors) {
-                    const formError = transformToFormError(removeNull(errors));
+                    const formError = transformToFormError((errors as ObjectError[]));
                     notifyGQLError(errors);
                     onErrorSet(formError);
                 }
@@ -269,7 +271,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     );
 
     const handleSubmit = useCallback((finalValues: FormType) => {
-        console.log('Handle Submit triggered::>>');
         createParkedItem({
             variables: {
                 parkedItem: finalValues as ParkedItemFormFields,
@@ -286,127 +287,161 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     const disabled = loading || errored;
 
     return (
-        <Container
-            className={_cs(className, styles.parkingLotBox)}
-            heading={(
-                <>
-                    <div className={styles.headerComponent}>
-                        <div>
-                            <Svg
-                                src={Logo}
-                                className={styles.logoPart}
+        <>
+            {user ? (
+                <Container
+                    className={_cs(className, styles.parkingLotBox)}
+                    heading={(
+                        <>
+                            <div className={styles.headerComponent}>
+                                <div>
+                                    <Svg
+                                        src={HelixSvg}
+                                        className={styles.logoPart}
+                                    />
+                                </div>
+                                <div className={styles.parkedName}>
+                                    Add Parked Item
+                                </div>
+                            </div>
+                        </>
+                    )}
+                    headerClassName={styles.headerStyle}
+                >
+                    <form
+                        className={_cs(className, styles.parkedItemForm)}
+                        onSubmit={createSubmitHandler(validate, onErrorSet, handleSubmit)}
+                    >
+                        {loading && <Loading absolute />}
+                        <NonFieldError>
+                            {error?.$internal}
+                        </NonFieldError>
+                        <Row>
+                            <TextInput
+                                className={styles.input}
+                                label="Title *"
+                                name="title"
+                                value={value.title}
+                                onChange={onValueChange}
+                                error={error?.fields?.title}
+                                disabled={disabled}
                             />
-                        </div>
-                        <div className={styles.parkedName}>
-                            Add Parked Item
-                        </div>
-                    </div>
-                </>
-            )}
-            headerClassName={styles.headerStyle}
-        >
-            <form
-                className={_cs(className, styles.parkedItemForm)}
-                onSubmit={createSubmitHandler(validate, onErrorSet, handleSubmit)}
-            >
-                {loading && <Loading absolute />}
-                <NonFieldError>
-                    {error?.$internal}
-                </NonFieldError>
-                <Row>
-                    <TextInput
-                        className={styles.input}
-                        label="Title *"
-                        name="title"
-                        value={value.title}
-                        onChange={onValueChange}
-                        error={error?.fields?.title}
-                        disabled={disabled}
-                    />
-                </Row>
-                <Row>
-                    <TextInput
-                        className={styles.input}
-                        label="URL *"
-                        name="url"
-                        value={value.url}
-                        onChange={onValueChange}
-                        error={error?.fields?.url}
-                        disabled={disabled}
-                    />
-                </Row>
-                <Row>
-                    <CountrySelectInput
-                        className={styles.input}
-                        label="Country *"
-                        options={countryOptions}
-                        name="country"
-                        onOptionsChange={setCountryOptions}
-                        onChange={onValueChange}
-                        value={value.country}
-                        error={error?.fields?.country}
-                        disabled={disabled}
-                    />
-                </Row>
-                <Row>
-                    <UserSelectInput
-                        className={styles.input}
-                        label="Assignee *"
-                        options={assignedToOptions}
-                        name="assignedTo"
-                        onOptionsChange={setAssignedToOptions}
-                        onChange={onValueChange}
-                        value={value.assignedTo}
-                        error={error?.fields?.assignedTo}
-                        disabled={disabled}
-                    />
-                </Row>
-                <Row>
-                    <SelectInput
-                        className={styles.input}
-                        label="Status *"
-                        name="status"
-                        options={statusOptions}
-                        value={value.status}
-                        keySelector={enumKeySelector}
-                        labelSelector={enumLabelSelector}
-                        onChange={onValueChange}
-                        error={error?.fields?.status}
-                        disabled={disabled}
-                    />
-                </Row>
-                <Row>
-                    <TextArea
-                        className={styles.input}
-                        label="Comments"
-                        name="comments"
-                        value={value.comments}
-                        onChange={onValueChange}
-                        disabled={disabled}
-                        error={error?.fields?.comments}
-                    />
-                </Row>
+                        </Row>
+                        <Row>
+                            <TextInput
+                                className={styles.input}
+                                label="URL *"
+                                name="url"
+                                value={value.url}
+                                onChange={onValueChange}
+                                error={error?.fields?.url}
+                                disabled={disabled}
+                            />
+                        </Row>
+                        <Row>
+                            <CountrySelectInput
+                                className={styles.input}
+                                label="Country *"
+                                options={countryOptions}
+                                name="country"
+                                onOptionsChange={setCountryOptions}
+                                onChange={onValueChange}
+                                value={value.country}
+                                error={error?.fields?.country}
+                                disabled={disabled}
+                            />
+                        </Row>
+                        <Row>
+                            <UserSelectInput
+                                className={styles.input}
+                                label="Assignee *"
+                                options={assignedToOptions}
+                                name="assignedTo"
+                                onOptionsChange={setAssignedToOptions}
+                                onChange={onValueChange}
+                                value={value.assignedTo}
+                                error={error?.fields?.assignedTo}
+                                disabled={disabled}
+                            />
+                        </Row>
+                        <Row>
+                            <SelectInput
+                                className={styles.input}
+                                label="Status *"
+                                name="status"
+                                options={statusOptions}
+                                value={value.status}
+                                keySelector={enumKeySelector}
+                                labelSelector={enumLabelSelector}
+                                onChange={onValueChange}
+                                error={error?.fields?.status}
+                                disabled={disabled}
+                            />
+                        </Row>
+                        <Row>
+                            <TextArea
+                                className={styles.input}
+                                label="Comments"
+                                name="comments"
+                                value={value.comments}
+                                onChange={onValueChange}
+                                disabled={disabled}
+                                error={error?.fields?.comments}
+                            />
+                        </Row>
 
-                <div className={styles.footerButtons}>
-                    <Button
-                        name={undefined}
-                        onClick={handleCloseExtension}
-                        variant="primary"
-                        icons={<IoCloseCircle />}
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        type="submit"
-                        name={undefined}
-                        disabled={disabled || pristine}
-                        variant="primary"
-                    >
-                        Submit
-                    </Button>
-                </div>
-            </form>
-        </Container>
+                        <div className={styles.footerButtons}>
+                            <Button
+                                name={undefined}
+                                onClick={handleCloseExtension}
+                                variant="primary"
+                                icons={<IoCloseCircle />}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                type="submit"
+                                name={undefined}
+                                disabled={disabled || pristine}
+                                variant="primary"
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                    </form>
+                </Container>
+            ) : (
+                <Message
+                    className={_cs(className, styles.messageBox)}
+                    message={(
+                        <>
+                            <p>
+                                Problem loading the parked item form.
+                            </p>
+                            <p>
+                                Please check your login credentials or internet connection.
+                            </p>
+                        </>
+                    )}
+                    icon={(
+                        <Logo
+                            size="large"
+                            variant="default"
+                        />
+                    )}
+                    actions={(
+                        <Button
+                            name={undefined}
+                            onClick={handleCloseExtension}
+                            variant="primary"
+                            icons={<IoCloseCircle />}
+                        >
+                            Close
+                        </Button>
+                    )}
+                />
+            )}
+        </>
     );
 }
 

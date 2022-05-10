@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useCallback } from 'react';
+import React, { useState, useContext, useMemo, useCallback, useEffect } from 'react';
 import { _cs } from '@togglecorp/fujs';
 import {
     TextInput,
@@ -139,6 +139,11 @@ const schema: FormSchema = {
     }),
 };
 
+interface WebInfo {
+    title?: string;
+    url?: string;
+}
+
 interface ParkedItemFormProps {
     className?: string;
     id?: string;
@@ -270,6 +275,15 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         },
     );
 
+    const handleInfoAutoFill = useCallback((webInfo: WebInfo) => {
+        if (webInfo.url) {
+            onValueChange(webInfo.url, 'url');
+        }
+        if (webInfo.title) {
+            onValueChange(webInfo.title, 'title');
+        }
+    }, [onValueChange]);
+
     const handleSubmit = useCallback((finalValues: FormType) => {
         createParkedItem({
             variables: {
@@ -281,6 +295,21 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     const handleCloseExtension = useCallback(() => {
         window.close();
     }, []);
+
+    useEffect(() => {
+        chrome.tabs.query({
+            active: true,
+            currentWindow: true,
+        }, (tabs) => {
+            const activeTab = tabs && tabs[0];
+            if (activeTab?.url) {
+                handleInfoAutoFill({
+                    url: activeTab?.url,
+                    title: activeTab?.title,
+                });
+            }
+        });
+    }, [handleInfoAutoFill]);
 
     const loading = createLoading || parkedItemDataLoading || parkedItemOptionsLoading;
     const errored = !!parkedItemDataError || !!parkedItemOptionsError;

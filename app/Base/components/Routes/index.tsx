@@ -22,6 +22,12 @@ function Routes(props: Props) {
             <Switch>
                 <Route
                     exact
+                    path={routes.index.path}
+                >
+                    {routes.index.load({ className })}
+                </Route>
+                <Route
+                    exact
                     path={routes.home.path}
                 >
                     {routes.home.load({ className })}

@@ -31,13 +31,12 @@ import { IoCloseCircle } from 'react-icons/io5';
 
 import Row from '#base/components/Row';
 import Container from '#base/components/Container';
-import user from '#base/context/UserContext';
-import Svg from '#base/components/Svg';
 import {
     ServerContext,
     productionValues,
     stagingValues,
-} from '#base/context/serverContext';
+} from '#base/context/ServerContext';
+import { UserContext } from '#base/context/UserContext';
 import NonFieldError from '#components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
 import NotificationContext from '#base/context/NotificationContext';
@@ -45,7 +44,6 @@ import UserSelectInput, { UserOption } from '#base/components/selections/UserSel
 import Loading from '#base/components/Loading';
 import routes from '#base/configs/routes';
 import Logo from '#base/components/Logo';
-import HelixSvg from '#base/resources/img/logo.svg';
 import { transformToFormError, ObjectError } from '#base/utils/errorTransform';
 
 import {
@@ -145,39 +143,6 @@ const schema: FormSchema = {
     }),
 };
 
-interface ConfigProps {
-    activeConfig: 'production' | 'alpha' | 'custom';
-    webServerUrl?: string;
-    apiServerUrl?: string;
-    serverlessUrl?: string;
-    identifier?: string;
-}
-
-function getWebAddress(configMode: ConfigProps) {
-    if (configMode.activeConfig === 'custom') {
-        return configMode.webServerUrl;
-    }
-    if (configMode.activeConfig === 'production') {
-        return productionValues.webServerUrl;
-    }
-    if (configMode.activeConfig === 'alpha') {
-        return stagingValues.webServerUrl;
-    }
-    return null;
-}
-function getIdentifier(configMode: ConfigProps) {
-    if (configMode.activeConfig === 'custom') {
-        return configMode.identifier;
-    }
-    if (configMode.activeConfig === 'production') {
-        return productionValues.identifier;
-    }
-    if (configMode.activeConfig === 'alpha') {
-        return stagingValues.identifier;
-    }
-    return null;
-}
-
 interface WebInfo {
     title?: string;
     url?: string;
@@ -194,6 +159,8 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         className,
     } = props;
 
+    const { user } = useContext(UserContext);
+    console.log('user context info', user);
     const history = useHistory();
     const { selectedConfig } = useContext(ServerContext);
 
@@ -206,9 +173,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         assignedToOptions,
         setAssignedToOptions,
     ] = useState<UserOption[] | null | undefined>();
-
-    const [csrfToken, setCsrfToken] = useState<string | undefined>();
-    const [csrfTokenLoaded, setCsrfTokenLoaded] = useState(false);
 
     const toBeReviewed: ParkingLotStatus = 'TO_BE_REVIEWED';
     const reviewed: ParkingLotStatus = 'REVIEWED';
@@ -348,23 +312,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     }, []);
 
     useEffect(() => {
-        console.log('parked item form');
-        const url = getWebAddress(selectedConfig);
-        console.log('Obtained url::>>', url);
-        if (url) {
-            chrome.cookies.get(
-                {
-                    url,
-                    name: 'sessionid',
-                }, (cookie: { value: string } | undefined | null) => {
-                    if (cookie) {
-                        console.log('Obtained cookie:>>', cookie);
-                        // setCsrfToken(cookie.value);
-                    }
-                    setCsrfTokenLoaded(true);
-                },
-            );
-        }
+        console.log('Reached ParkItem Form');
         chrome.tabs.query({
             active: true,
             currentWindow: true,

@@ -15,6 +15,12 @@ import Navbar from '#base/components/Navbar';
 import PreloadMessage from '#base/components/PreloadMessage';
 import browserHistory from '#base/configs/history';
 import sentryConfig from '#base/configs/sentry';
+import {
+    ServerContext,
+    ServerContextInterface,
+    defaultServerConfig,
+    SelectedConfigType,
+} from '#base/context/ServerContext';
 import { UserContext, UserContextInterface } from '#base/context/UserContext';
 import { NavbarContext, NavbarContextInterface } from '#base/context/NavbarContext';
 import AuthPopup from '#base/components/AuthPopup';
@@ -24,6 +30,7 @@ import NotificationContext, {
     NotificationVariant,
 } from '#base/context/NotificationContext';
 import { sync } from '#base/hooks/useAuthSync';
+import useLocalStorage from '#base/hooks/useLocalStorage';
 import Routes from '#base/components/Routes';
 import { User } from '#base/types/user';
 import apolloConfig from '#base/configs/apollo';
@@ -72,6 +79,11 @@ function Base() {
         [key: string]: Notification;
     }>({});
 
+    const [
+        selectedConfig,
+        setSelectedConfig,
+    ] = useLocalStorage<SelectedConfigType>('stored-config', defaultServerConfig);
+
     const authenticated = !!user;
 
     const setUserWithSentry: typeof setUser = useCallback(
@@ -119,6 +131,14 @@ function Base() {
             setNavbarVisibility,
         }),
         [navbarVisibility, setNavbarVisibility],
+    );
+
+    const serverContext: ServerContextInterface = useMemo(
+        () => ({
+            selectedConfig,
+            setSelectedConfig,
+        }),
+        [selectedConfig, setSelectedConfig],
     );
 
     const [alerts, setAlerts] = React.useState<AlertOptions[]>([]);
@@ -237,7 +257,6 @@ function Base() {
     }), [notify, notifyGQLError, dismiss]);
 
     const notificationKeyList = Object.keys(notifications);
-
     return (
         <>
             <div className={styles.base}>
@@ -254,20 +273,22 @@ function Base() {
                         <UserContext.Provider value={userContext}>
                             <NotificationContext.Provider value={notificationContextValue}>
                                 <NavbarContext.Provider value={navbarContext}>
-                                    <AlertContext.Provider value={alertContext}>
-                                        <AuthPopup />
-                                        <AlertContainer className={styles.alertContainer} />
-                                        <Router history={browserHistory}>
-                                            <Init
-                                                className={styles.init}
-                                            >
-                                                <Navbar className={_cs(styles.navbar)} />
-                                                <Routes
-                                                    className={styles.view}
-                                                />
-                                            </Init>
-                                        </Router>
-                                    </AlertContext.Provider>
+                                    <ServerContext.Provider value={serverContext}>
+                                        <AlertContext.Provider value={alertContext}>
+                                            <AuthPopup />
+                                            <AlertContainer className={styles.alertContainer} />
+                                            <Router history={browserHistory}>
+                                                <Init
+                                                    className={styles.init}
+                                                >
+                                                    <Navbar className={_cs(styles.navbar)} />
+                                                    <Routes
+                                                        className={styles.view}
+                                                    />
+                                                </Init>
+                                            </Router>
+                                        </AlertContext.Provider>
+                                    </ServerContext.Provider>
                                 </NavbarContext.Provider>
                             </NotificationContext.Provider>
                         </UserContext.Provider>

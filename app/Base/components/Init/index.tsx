@@ -33,7 +33,6 @@ function Init(props: Props) {
     } = props;
 
     const [ready, setReady] = useState(false);
-
     const {
         setUser,
     } = useContext(UserContext);

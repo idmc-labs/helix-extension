@@ -23,7 +23,7 @@ import { IoArrowBackCircleSharp } from 'react-icons/io5';
 import route from '#base/configs/routes';
 import {
     ServerContext,
-} from '#base/context/serverContext';
+} from '#base/context/ServerContext';
 import { productionValues, alphaValues } from '#base/utils/apollo';
 import Card from '#base/components/Card';
 import ContainerCard from '#base/components/ContainerCard';
@@ -136,7 +136,7 @@ function SourceSettings(props: Props) {
                 validate,
                 setError,
                 (val) => {
-                    console.log('server detailsss::>>', val);
+                    console.log('Custom server details::>>', val);
                     const data = { ...val } as FormType;
                     setSelectedConfig({
                         activeConfig: activeView,
@@ -160,7 +160,7 @@ function SourceSettings(props: Props) {
     );
 
     const handleFixedSubmit = useCallback(() => {
-        console.log('server detailsss fixed::>>');
+        console.log('Fixed server details::>>');
         setSelectedConfig({
             activeConfig: activeView,
             webServerUrl: otherConfig.webServerUrl,
@@ -204,7 +204,7 @@ function SourceSettings(props: Props) {
 
     const handleServerEnvironmentChange = useCallback(
         (val: ConfigKeys) => {
-            console.log('Reached the view point::>>', val);
+            console.log('Tab currently active::>>', val);
             setActiveView(val);
             setPristine(false);
         },

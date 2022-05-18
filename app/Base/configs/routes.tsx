@@ -68,14 +68,14 @@ const failureForm = wrap({
 });
 
 const fourHundredFour = wrap({
-    path: '*',
+    path: '',
     title: '404',
     component: lazy(() => import('#base/components/PreloadMessage')),
     componentProps: {
         heading: '404',
         content: 'What you are looking for does not exist.',
     },
-    visibility: 'is-authenticated',
+    visibility: 'is-anything',
     navbarVisibility: false,
 });
 

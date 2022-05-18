@@ -25,7 +25,7 @@ export const productionValues: Omit<SelectedConfigType, 'activeConfig'> = {
 
 export const stagingValues: Omit<SelectedConfigType, 'activeConfig'> = {
     webServerUrl: 'https://alpha.idmcdb.org',
-    apiServerUrl: 'https://alpha-api.idmcdb.org',
+    apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
     serverlessUrl: 'https://services-alpha.idmcdb.org',
     identifier: 'alpha',
 };

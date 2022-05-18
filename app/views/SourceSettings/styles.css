@@ -1,0 +1,21 @@
+.settings-box {
+    width: 100vw;
+    height: 90vh;
+    --width-preview: 560px;
+
+    .alpha-form {
+        padding: calc(var(--tui-spacing-large) - var(--tui-spacing-medium));
+
+        .input {
+            padding: var(--tui-spacing-medium);
+        }
+    }
+
+    .footer-style {
+        color: var(--color-foreground);
+    }
+
+    .tab {
+        padding: var(--spacing-medium);
+    }
+}

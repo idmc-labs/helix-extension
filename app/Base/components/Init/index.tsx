@@ -18,7 +18,7 @@ const ME = gql`
             fullName
             username
             email
-          }
+        }
     }
 `;
 

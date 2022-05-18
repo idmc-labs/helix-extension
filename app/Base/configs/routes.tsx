@@ -11,14 +11,42 @@ const login = wrap({
     visibility: 'is-not-authenticated',
 });
 
-const home = wrap({
+const index = wrap({
     // NOTE: the first url is /index.html for addons
     path: '/index.html',
-    title: 'Home',
+    title: 'Index',
     navbarVisibility: true,
     component: lazy(() => import('#views/ParkedItemForm')),
     componentProps: {},
     visibility: 'is-authenticated',
+});
+
+const home = wrap({
+    // NOTE: the first url is /index.html for addons
+    path: '/',
+    title: 'ParkedItem Form',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/ParkedItemForm')),
+    componentProps: {},
+    visibility: 'is-authenticated',
+});
+
+const serverSettings = wrap({
+    path: '/settings.html',
+    title: 'Settings',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/SourceSettings')),
+    componentProps: {},
+    visibility: 'is-anything',
+});
+
+const settingsSuccessForm = wrap({
+    path: '/settingsSuccess/',
+    title: 'Url Settings Success',
+    navbarVisibility: true,
+    component: lazy(() => import('#views/SettingsSuccess')),
+    componentProps: {},
+    visibility: 'is-anything',
 });
 
 const successForm = wrap({
@@ -47,15 +75,18 @@ const fourHundredFour = wrap({
         heading: '404',
         content: 'What you are looking for does not exist.',
     },
-    visibility: 'is-anything',
+    visibility: 'is-authenticated',
     navbarVisibility: false,
 });
 
 const routes = {
     login,
     home,
+    index,
     fourHundredFour,
     successForm,
     failureForm,
+    serverSettings,
+    settingsSuccessForm,
 };
 export default routes;

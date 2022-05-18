@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import {
     isValidUrl as isValidRemoteUrl,
@@ -22,6 +23,8 @@ const rege = /(?<=\/\/)localhost(?=[:/]|$)/;
 export function isLocalUrl(url: string) {
     return rege.test(url);
 }
+
+export const genericMemo: (<T>(c: T) => T) = memo;
 
 export function isValidUrl(url: string | undefined): url is string {
     if (!url) {

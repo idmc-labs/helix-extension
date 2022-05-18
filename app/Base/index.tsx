@@ -11,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IoAlertCircle, IoCloseCircle, IoCheckmarkCircle } from 'react-icons/io5';
 
 import Init from '#base/components/Init';
+import Navbar from '#base/components/Navbar';
 import PreloadMessage from '#base/components/PreloadMessage';
 import browserHistory from '#base/configs/history';
 import sentryConfig from '#base/configs/sentry';
@@ -260,6 +261,7 @@ function Base() {
                                             <Init
                                                 className={styles.init}
                                             >
+                                                <Navbar className={_cs(styles.navbar)} />
                                                 <Routes
                                                     className={styles.view}
                                                 />

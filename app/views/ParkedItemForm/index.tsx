@@ -14,10 +14,11 @@ import {
     createSubmitHandler,
     requiredCondition,
     requiredStringCondition,
-    idCondition,
+    getErrorObject,
     urlCondition,
     PartialForm,
     PurgeNull,
+    internal,
 } from '@togglecorp/toggle-form';
 
 import {
@@ -32,7 +33,12 @@ import Row from '#base/components/Row';
 import Container from '#base/components/Container';
 import user from '#base/context/UserContext';
 import Svg from '#base/components/Svg';
-import NonFieldError from '#base/components/NonFieldError';
+import {
+    ServerContext,
+    productionValues,
+    stagingValues,
+} from '#base/context/serverContext';
+import NonFieldError from '#components/NonFieldError';
 import CountrySelectInput, { CountryOption } from '#base/components/selections/CountrySelectInput';
 import NotificationContext from '#base/context/NotificationContext';
 import UserSelectInput, { UserOption } from '#base/components/selections/UserSelectInput';
@@ -129,7 +135,7 @@ type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
 const schema: FormSchema = {
     fields: (): FormSchemaFields => ({
-        id: [idCondition],
+        id: [requiredCondition],
         country: [requiredCondition],
         title: [requiredStringCondition],
         url: [requiredCondition, urlCondition],
@@ -138,6 +144,39 @@ const schema: FormSchema = {
         comments: [],
     }),
 };
+
+interface ConfigProps {
+    activeConfig: 'production' | 'alpha' | 'custom';
+    webServerUrl?: string;
+    apiServerUrl?: string;
+    serverlessUrl?: string;
+    identifier?: string;
+}
+
+function getWebAddress(configMode: ConfigProps) {
+    if (configMode.activeConfig === 'custom') {
+        return configMode.webServerUrl;
+    }
+    if (configMode.activeConfig === 'production') {
+        return productionValues.webServerUrl;
+    }
+    if (configMode.activeConfig === 'alpha') {
+        return stagingValues.webServerUrl;
+    }
+    return null;
+}
+function getIdentifier(configMode: ConfigProps) {
+    if (configMode.activeConfig === 'custom') {
+        return configMode.identifier;
+    }
+    if (configMode.activeConfig === 'production') {
+        return productionValues.identifier;
+    }
+    if (configMode.activeConfig === 'alpha') {
+        return stagingValues.identifier;
+    }
+    return null;
+}
 
 interface WebInfo {
     title?: string;
@@ -156,6 +195,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     } = props;
 
     const history = useHistory();
+    const { selectedConfig } = useContext(ServerContext);
 
     const [
         countryOptions,
@@ -167,23 +207,34 @@ function ParkedItemForm(props: ParkedItemFormProps) {
         setAssignedToOptions,
     ] = useState<UserOption[] | null | undefined>();
 
+    const [csrfToken, setCsrfToken] = useState<string | undefined>();
+    const [csrfTokenLoaded, setCsrfTokenLoaded] = useState(false);
+
     const toBeReviewed: ParkingLotStatus = 'TO_BE_REVIEWED';
     const reviewed: ParkingLotStatus = 'REVIEWED';
 
     const defaultFormValues: PartialForm<FormType> = {
         status: toBeReviewed,
+        id: undefined,
+        country: undefined,
+        title: undefined,
+        url: undefined,
+        assignedTo: undefined,
+        comments: undefined,
     };
 
     const {
         pristine,
         value,
-        error,
-        onValueChange,
+        error: riskyError,
         validate,
-        onErrorSet,
-        onValueSet,
-        onPristineSet,
-    } = useForm(defaultFormValues, schema);
+        setError,
+        setFieldValue,
+        setPristine,
+        setValue,
+    } = useForm(schema, defaultFormValues);
+
+    const error = getErrorObject(riskyError);
 
     const {
         notify,
@@ -219,7 +270,7 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                     setAssignedToOptions([parkedItem.assignedTo]);
                 }
 
-                onValueSet(removeNull({
+                setValue(removeNull({
                     ...parkedItem,
                     country: parkedItem.country?.id,
                     assignedTo: parkedItem.assignedTo?.id,
@@ -255,10 +306,10 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 if (errors) {
                     const formError = transformToFormError((errors as ObjectError[]));
                     notifyGQLError(errors);
-                    onErrorSet(formError);
+                    setError(formError);
                 }
                 if (result) {
-                    onPristineSet(true);
+                    setPristine(true);
                     history.push(routes.successForm.path);
                 }
             },
@@ -268,8 +319,8 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                     children: errors.message,
                     variant: 'error',
                 });
-                onErrorSet({
-                    $internal: errors.message,
+                setError({
+                    [internal]: errors.message,
                 });
             },
         },
@@ -277,12 +328,12 @@ function ParkedItemForm(props: ParkedItemFormProps) {
 
     const handleInfoAutoFill = useCallback((webInfo: WebInfo) => {
         if (webInfo.url) {
-            onValueChange(webInfo.url, 'url');
+            setFieldValue(webInfo.url, 'url');
         }
         if (webInfo.title) {
-            onValueChange(webInfo.title, 'title');
+            setFieldValue(webInfo.title, 'title');
         }
-    }, [onValueChange]);
+    }, [setFieldValue]);
 
     const handleSubmit = useCallback((finalValues: FormType) => {
         createParkedItem({
@@ -297,6 +348,23 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     }, []);
 
     useEffect(() => {
+        console.log('parked item form');
+        const url = getWebAddress(selectedConfig);
+        console.log('Obtained url::>>', url);
+        if (url) {
+            chrome.cookies.get(
+                {
+                    url,
+                    name: 'sessionid',
+                }, (cookie: { value: string } | undefined | null) => {
+                    if (cookie) {
+                        console.log('Obtained cookie:>>', cookie);
+                        // setCsrfToken(cookie.value);
+                    }
+                    setCsrfTokenLoaded(true);
+                },
+            );
+        }
         chrome.tabs.query({
             active: true,
             currentWindow: true,
@@ -309,7 +377,10 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                 });
             }
         });
-    }, [handleInfoAutoFill]);
+    }, [
+        handleInfoAutoFill,
+        selectedConfig,
+    ]);
 
     const loading = createLoading || parkedItemDataLoading || parkedItemOptionsLoading;
     const errored = !!parkedItemDataError || !!parkedItemOptionsError;
@@ -320,39 +391,21 @@ function ParkedItemForm(props: ParkedItemFormProps) {
             {user ? (
                 <Container
                     className={_cs(className, styles.parkingLotBox)}
-                    heading={(
-                        <>
-                            <div className={styles.headerComponent}>
-                                <div>
-                                    <Svg
-                                        src={HelixSvg}
-                                        className={styles.logoPart}
-                                    />
-                                </div>
-                                <div className={styles.parkedName}>
-                                    Add Parked Item
-                                </div>
-                            </div>
-                        </>
-                    )}
-                    headerClassName={styles.headerStyle}
                 >
                     <form
                         className={_cs(className, styles.parkedItemForm)}
-                        onSubmit={createSubmitHandler(validate, onErrorSet, handleSubmit)}
+                        onSubmit={createSubmitHandler(validate, setError, handleSubmit)}
                     >
                         {loading && <Loading absolute />}
-                        <NonFieldError>
-                            {error?.$internal}
-                        </NonFieldError>
+                        <NonFieldError error={error} />
                         <Row>
                             <TextInput
                                 className={styles.input}
                                 label="Title *"
                                 name="title"
                                 value={value.title}
-                                onChange={onValueChange}
-                                error={error?.fields?.title}
+                                onChange={setFieldValue}
+                                error={error?.title}
                                 disabled={disabled}
                             />
                         </Row>
@@ -362,8 +415,8 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                                 label="URL *"
                                 name="url"
                                 value={value.url}
-                                onChange={onValueChange}
-                                error={error?.fields?.url}
+                                onChange={setFieldValue}
+                                error={error?.url}
                                 disabled={disabled}
                             />
                         </Row>
@@ -374,9 +427,9 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                                 options={countryOptions}
                                 name="country"
                                 onOptionsChange={setCountryOptions}
-                                onChange={onValueChange}
+                                onChange={setFieldValue}
                                 value={value.country}
-                                error={error?.fields?.country}
+                                error={error?.country}
                                 disabled={disabled}
                             />
                         </Row>
@@ -387,9 +440,9 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                                 options={assignedToOptions}
                                 name="assignedTo"
                                 onOptionsChange={setAssignedToOptions}
-                                onChange={onValueChange}
+                                onChange={setFieldValue}
                                 value={value.assignedTo}
-                                error={error?.fields?.assignedTo}
+                                error={error?.assignedTo}
                                 disabled={disabled}
                             />
                         </Row>
@@ -402,8 +455,8 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                                 value={value.status}
                                 keySelector={enumKeySelector}
                                 labelSelector={enumLabelSelector}
-                                onChange={onValueChange}
-                                error={error?.fields?.status}
+                                onChange={setFieldValue}
+                                error={error?.status}
                                 disabled={disabled}
                             />
                         </Row>
@@ -413,9 +466,9 @@ function ParkedItemForm(props: ParkedItemFormProps) {
                                 label="Comments"
                                 name="comments"
                                 value={value.comments}
-                                onChange={onValueChange}
+                                onChange={setFieldValue}
                                 disabled={disabled}
-                                error={error?.fields?.comments}
+                                error={error?.comments}
                             />
                         </Row>
 

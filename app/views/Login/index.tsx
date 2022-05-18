@@ -1,9 +1,11 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
 import { Message } from '@togglecorp/toggle-ui';
-import { IoAlertCircle } from 'react-icons/io5';
+import { IoAlertCircle, IoSettingsOutline } from 'react-icons/io5';
 
 import Logo from '#base/components/Logo';
+import SmartButtonLikeLink from '#base/components/SmartButtonLikeLink';
+import route from '#base/configs/routes';
 
 import styles from './styles.css';
 
@@ -33,6 +35,17 @@ function Login(props: LoginInterface) {
                     size="large"
                     variant="default"
                 />
+            )}
+            actions={(
+                <SmartButtonLikeLink
+                    className={styles.footerStyle}
+                    route={route.serverSettings}
+                    icons={(
+                        <IoSettingsOutline />
+                    )}
+                >
+                    Settings
+                </SmartButtonLikeLink>
             )}
         />
     );

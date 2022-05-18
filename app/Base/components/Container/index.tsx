@@ -6,7 +6,7 @@ import Footer from '../Footer';
 
 import styles from './styles.css';
 
-interface Props {
+export interface Props {
     className?: string;
     heading?: React.ReactNode;
     headerIcons?: React.ReactNode;

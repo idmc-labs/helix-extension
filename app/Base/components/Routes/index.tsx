@@ -28,6 +28,18 @@ function Routes(props: Props) {
                 </Route>
                 <Route
                     exact
+                    path={routes.serverSettings.path}
+                >
+                    {routes.serverSettings.load({ className })}
+                </Route>
+                <Route
+                    exact
+                    path={routes.settingsSuccessForm.path}
+                >
+                    {routes.settingsSuccessForm.load({ className })}
+                </Route>
+                <Route
+                    exact
                     path={routes.login.path}
                 >
                     {routes.login.load({ className })}

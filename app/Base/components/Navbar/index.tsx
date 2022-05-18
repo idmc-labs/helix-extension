@@ -1,11 +1,11 @@
 import React from 'react';
 import { _cs } from '@togglecorp/fujs';
-// import { IoSettingsOutline } from 'react-icons/io5';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 import Svg from '#base/components/Svg';
 import Logo from '#base/resources/img/logo.svg';
-// import SmartLink from '#base/components/SmartLink';
-// import route from '#base/configs/routes';
+import SmartLink from '#base/components/SmartLink';
+import route from '#base/configs/routes';
 
 import styles from './styles.css';
 
@@ -23,6 +23,14 @@ function Navbar(props: Props) {
                     src={Logo}
                     className={styles.logo}
                 />
+            </div>
+            <div className={styles.main}>
+                <SmartLink
+                    route={route.serverSettings}
+                    className={styles.link}
+                >
+                    <IoSettingsOutline />
+                </SmartLink>
             </div>
         </nav>
     );

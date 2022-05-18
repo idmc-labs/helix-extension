@@ -10,3 +10,17 @@ export function checkErrorCode(errors: ApolloError['graphQLErrors'], path: (stri
         && isArrayEqual(error.path, path) && code === error.extensions.code
     ));
 }
+
+export const productionValues = {
+    webServer: 'https://helix-nightly.idmcdb.org',
+    apiServer: 'https://nightly-api.idmcdb.org',
+    serverless: 'https://services.idmcdb.org',
+    identifier: 'prod',
+};
+
+export const alphaValues = {
+    webServer: 'https://helix-alpha.idmcdb.org',
+    apiServer: 'https://alpha-api.idmcdb.org',
+    serverless: 'https://services-alpha.idmcdb.org',
+    identifier: 'staging',
+};

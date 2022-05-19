@@ -6,7 +6,6 @@ export interface SelectedConfigType {
     activeConfig: ActiveConfig;
     webServerUrl?: string;
     apiServerUrl?: string;
-    serverlessUrl?: string;
     identifier?: string;
 }
 
@@ -19,14 +18,12 @@ export interface ServerContextInterface {
 export const productionValues: Omit<SelectedConfigType, 'activeConfig'> = {
     webServerUrl: 'https://localhost:3080',
     apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
-    serverlessUrl: 'https://services.idmcdb.org',
     identifier: 'development',
 };
 
 export const stagingValues: Omit<SelectedConfigType, 'activeConfig'> = {
     webServerUrl: 'https://alpha.idmcdb.org',
     apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
-    serverlessUrl: 'https://services-alpha.idmcdb.org',
     identifier: 'alpha',
 };
 

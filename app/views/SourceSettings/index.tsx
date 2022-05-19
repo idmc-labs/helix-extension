@@ -37,7 +37,6 @@ type ConfigKeys = 'production' | 'alpha' | 'custom';
 type ServerConfigFields = {
     webServer: string;
     apiServer: string;
-    serverless: string;
     identifier: string;
 }
 type FormType = PartialForm<ServerConfigFields>;
@@ -51,14 +50,12 @@ const schema: FormSchema = {
                 identifier: [requiredStringCondition],
                 webServer: [requiredStringCondition, urlCondition],
                 apiServer: [requiredStringCondition, urlCondition],
-                serverless: [requiredStringCondition, urlCondition],
             });
         }
         return {
             identifier: [],
             webServer: [],
             apiServer: [],
-            serverless: [],
         };
     },
 };
@@ -87,7 +84,7 @@ function SourceSettings(props: Props) {
                 name="production"
                 className={styles.tab}
             >
-                Production
+                Staging
             </Tab>
             <Tab
                 name="alpha"
@@ -107,7 +104,6 @@ function SourceSettings(props: Props) {
     const defaultForm: FormType = useMemo(() => ({
         webServer: otherConfig.webServerUrl,
         apiServer: otherConfig.apiServerUrl,
-        serverless: otherConfig.serverlessUrl,
         identifier: otherConfig.identifier,
     }), [otherConfig]);
 
@@ -136,13 +132,11 @@ function SourceSettings(props: Props) {
                 validate,
                 setError,
                 (val) => {
-                    console.log('Custom server details::>>', val);
                     const data = { ...val } as FormType;
                     setSelectedConfig({
                         activeConfig: activeView,
                         webServerUrl: data.webServer,
                         apiServerUrl: data.apiServer,
-                        serverlessUrl: data.serverless,
                         identifier: data.identifier,
                     });
                 },
@@ -160,12 +154,10 @@ function SourceSettings(props: Props) {
     );
 
     const handleFixedSubmit = useCallback(() => {
-        console.log('Fixed server details::>>');
         setSelectedConfig({
             activeConfig: activeView,
             webServerUrl: otherConfig.webServerUrl,
             apiServerUrl: otherConfig.apiServerUrl,
-            serverlessUrl: otherConfig.serverlessUrl,
             identifier: otherConfig.identifier,
         });
         history.push(route.settingsSuccessForm.path);
@@ -183,7 +175,6 @@ function SourceSettings(props: Props) {
                     identifier: productionValues.identifier,
                     webServer: productionValues.webServer,
                     apiServer: productionValues.apiServer,
-                    serverless: productionValues.serverless,
                 };
             }
             if (activeView === 'alpha') {
@@ -191,7 +182,6 @@ function SourceSettings(props: Props) {
                     identifier: alphaValues.identifier,
                     webServer: alphaValues.webServer,
                     apiServer: alphaValues.apiServer,
-                    serverless: alphaValues.serverless,
                 };
             }
             return value;
@@ -204,7 +194,6 @@ function SourceSettings(props: Props) {
 
     const handleServerEnvironmentChange = useCallback(
         (val: ConfigKeys) => {
-            console.log('Tab currently active::>>', val);
             setActiveView(val);
             setPristine(false);
         },
@@ -269,14 +258,6 @@ function SourceSettings(props: Props) {
                                 onChange={undefined}
                                 readOnly
                             />
-                            <TextInput
-                                className={styles.input}
-                                label="Serverless Address"
-                                name="serverless"
-                                value={valueToShow.serverless}
-                                onChange={undefined}
-                                readOnly
-                            />
                         </Card>
                     </TabPanel>
                     <TabPanel name="alpha">
@@ -305,14 +286,6 @@ function SourceSettings(props: Props) {
                                 label="Api Server Address"
                                 name="apiServer"
                                 value={valueToShow.apiServer}
-                                onChange={undefined}
-                                readOnly
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Serverless Address"
-                                name="serverless"
-                                value={valueToShow.serverless}
                                 onChange={undefined}
                                 readOnly
                             />
@@ -352,16 +325,6 @@ function SourceSettings(props: Props) {
                                 readOnly={disableInput}
                                 error={error?.apiServer}
                             />
-                            <TextInput
-                                className={styles.input}
-                                label="Serverless Address"
-                                name="serverless"
-                                value={valueToShow.serverless}
-                                onChange={setFieldValue}
-                                readOnly={disableInput}
-                                error={error?.serverless}
-                            />
-
                         </Card>
                     </TabPanel>
                 </Tabs>

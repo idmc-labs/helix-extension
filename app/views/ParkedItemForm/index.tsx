@@ -33,8 +33,6 @@ import Row from '#base/components/Row';
 import Container from '#base/components/Container';
 import {
     ServerContext,
-    productionValues,
-    stagingValues,
 } from '#base/context/ServerContext';
 import { UserContext } from '#base/context/UserContext';
 import NonFieldError from '#components/NonFieldError';
@@ -160,7 +158,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     } = props;
 
     const { user } = useContext(UserContext);
-    console.log('user context info', user);
     const history = useHistory();
     const { selectedConfig } = useContext(ServerContext);
 
@@ -312,7 +309,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
     }, []);
 
     useEffect(() => {
-        console.log('Reached ParkItem Form');
         chrome.tabs.query({
             active: true,
             currentWindow: true,

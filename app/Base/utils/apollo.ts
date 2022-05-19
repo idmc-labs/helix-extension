@@ -14,13 +14,11 @@ export function checkErrorCode(errors: ApolloError['graphQLErrors'], path: (stri
 export const productionValues = {
     webServer: 'https://helix-nightly.idmcdb.org',
     apiServer: 'https://nightly-api.idmcdb.org',
-    serverless: 'https://services.idmcdb.org',
-    identifier: 'prod',
+    identifier: 'staging',
 };
 
 export const alphaValues = {
     webServer: 'https://helix-alpha.idmcdb.org',
     apiServer: 'https://alpha-api.idmcdb.org',
-    serverless: 'https://services-alpha.idmcdb.org',
-    identifier: 'staging',
+    identifier: 'alpha',
 };

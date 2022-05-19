@@ -6,7 +6,6 @@ import { IoAlertCircle, IoSettingsOutline } from 'react-icons/io5';
 import Logo from '#base/components/Logo';
 import SmartButtonLikeLink from '#base/components/SmartButtonLikeLink';
 import route from '#base/configs/routes';
-import user from '#base/context/UserContext';
 
 import styles from './styles.css';
 
@@ -18,7 +17,6 @@ function Login(props: LoginInterface) {
     const {
         className,
     } = props;
-    console.log('user info in login::>>', user);
 
     return (
         <Message

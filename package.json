@@ -40,6 +40,7 @@
         "@togglecorp/fujs": "^1.9.2",
         "@togglecorp/toggle-form": "^1.2.1",
         "@togglecorp/toggle-ui": "0.14.1",
+        "@types/chrome": "^0.0.188",
         "@types/svg-injector": "^0.0.29",
         "@types/uuid": "^8.3.0",
         "apollo-link": "^1.2.14",

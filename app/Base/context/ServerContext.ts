@@ -16,14 +16,14 @@ export interface ServerContextInterface {
 
 // FIXME: move these somewhere else
 export const productionValues: Omit<SelectedConfigType, 'activeConfig'> = {
-    webServerUrl: 'https://localhost:3080',
+    webServerUrl: 'https://https://helix-nightly.idmcdb.org',
     apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
     identifier: 'development',
 };
 
 export const stagingValues: Omit<SelectedConfigType, 'activeConfig'> = {
-    webServerUrl: 'https://alpha.idmcdb.org',
-    apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
+    webServerUrl: 'https://helix-alpha.idmcdb.org',
+    apiServerUrl: 'https://api.alpha.helix.idmcdb.org',
     identifier: 'alpha',
 };
 

@@ -1,5 +1,0 @@
-.card {
-    border-radius: var(--tui-border-radius-card);
-    background-color: var(--tui-color-background-card);
-    padding: var(--tui-spacing-medium);
-}

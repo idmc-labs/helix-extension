@@ -77,6 +77,9 @@
     --tui-color-warning: var(--color-warning);
 
     --tui-color-background-input-section-light: #e0e8f0;
+    --tui-color-background-scrollbar: transparent;
+    --tui-color-foreground-scrollbar: #cccccc;
+    --tui-width-scrollbar: 0.5rem;
 }
 
 body {
@@ -106,20 +109,25 @@ a {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    font-size: var(--dui-font-size-medium);
+    overflow-y: auto;
+    font-size: var(--tui-font-size-medium);
 
     .view,
     .init {
         flex-grow: 1;
-        overflow: auto;
+        overflow-y: auto;
     }
 
     .alert-container {
         position: fixed;
-        top: var(--dui-spacing-large);
-        right: var(--dui-spacing-large);
+        top: var(--tui-spacing-large);
+        right: var(--tui-spacing-large);
         z-index: 1;
         width: 20rem;
+    }
+
+    .navbar {
+        flex-shrink: 0;
     }
 
     .content {
@@ -127,7 +135,7 @@ a {
         flex-direction: column;
         flex-grow: 1;
         z-index: 0;
-        overflow: auto;
+        overflow-y: auto;
 
         .footer {
             display: flex;

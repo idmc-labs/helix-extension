@@ -1,48 +1,23 @@
-.parking-lot-box {
-    padding: var(--spacing-extra-large);
-    width: 100vw;
-    height: 90vh;
+.form {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
 
-    .parked-item-form {
-        position: relative;
-        padding-left: var(--tui-spacing-large);
-
-        .input {
-            flex-basis: calc(50% - var(--tui-spacing-medium) / 2);
-        }
-    }
-
-    .header-style {
-        padding: var(--spacing-medium);
-    }
-
-    .header-component {
+    .parking-lot-box {
         display: flex;
-        align-items: center;
-        flex-shrink: 0;
-        justify-content: space-between;
-        width: 100%;
-        color: var(--tui-color-brand);
+        flex-direction: column;
+        overflow-y: auto;
 
-        .logo-part {
-            height: var(--tui-font-size-ultra-large);
+        .content {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            gap: var(--tui-spacing-extra-small);
         }
-
-        .parked-name {
-            font-size: var(--tui-font-size);
-        }
-
     }
 }
 
 .message-box {
     display: flex;
     justify-content: center;
-}
-
-.footer-buttons {
-    display: flex;
-    justify-content: flex-end;
-    padding: var(--spacing-medium);
-    gap: var(--spacing-medium);
 }

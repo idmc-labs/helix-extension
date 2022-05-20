@@ -10,14 +10,7 @@
     gap: var(--tui-spacing-large);
 
     .app-brand {
-        display: flex;
-        align-items: center;
-        flex-shrink: 0;
         color: var(--tui-color-brand);
-
-        .logo {
-            height: var(--tui-font-size-super-large);
-        }
     }
 
     .main {

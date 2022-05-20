@@ -11,43 +11,39 @@
         body {
             position: relative;
             margin: 0;
+            background-color: 'var(--tui-color-background)';
             padding: 0;
             font-family: 'Source Sans Pro', sans-serif;
-            background-color: 'var(--dui-color-background)';
         }
 
         body {
             display: flex;
-            overflow-y: auto;
             /*vmin-height: 600px;
             min-width: 480px; */
             width: 480px;
             height: 600px;
+            overflow-y: auto;
         }
 
         * {
             box-sizing: border-box;
+            scrollbar-color: var(--tui-color-foreground-scrollbar) var(--tui-color-background-scrollbar);
+            scrollbar-width: thin;
         }
 
         ::-webkit-scrollbar {
-            width: var(--dui-width-scrollbar);
-            height: var(--dui-width-scrollbar);
-            background-color: var(--dui-color-background-scrollbar);
+            background-color: var(--tui-color-background-scrollbar);
+            width: var(--tui-width-scrollbar);
+            height: var(--tui-width-scrollbar);
         }
 
         ::-webkit-scrollbar-track {
-            background-color: var(--dui-color-background-scrollbar);
+            background-color: var(--tui-color-background-scrollbar);
         }
 
         ::-webkit-scrollbar-thumb {
-            border-radius: var(--dui-radius-scrollbar-border);
-            background-color: var(--dui-color-foreground-scrollbar);
-        }
-
-        #app-container {
-            flex-grow: 1;
-            display: flex;
-            overflow-y: auto;
+            border-radius: var(--tui-radius-scrollbar-border);
+            background-color: var(--tui-color-foreground-scrollbar);
         }
     </style>
 </head>

@@ -281,10 +281,8 @@ function Base() {
                                                 <Init
                                                     className={styles.init}
                                                 >
-                                                    <Navbar className={_cs(styles.navbar)} />
-                                                    <Routes
-                                                        className={styles.view}
-                                                    />
+                                                    <Navbar className={styles.navbar} />
+                                                    <Routes className={styles.view} />
                                                 </Init>
                                             </Router>
                                         </AlertContext.Provider>

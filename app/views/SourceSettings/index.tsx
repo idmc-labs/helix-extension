@@ -25,8 +25,7 @@ import {
     ServerContext,
 } from '#base/context/ServerContext';
 import { productionValues, alphaValues } from '#base/utils/apollo';
-import Card from '#base/components/Card';
-import ContainerCard from '#base/components/ContainerCard';
+import Container from '#base/components/Container';
 import SmartButtonLikeLink from '#base/components/SmartButtonLikeLink';
 import NonFieldError from '#components/NonFieldError';
 
@@ -77,29 +76,6 @@ function SourceSettings(props: Props) {
         activeConfig,
         ...otherConfig
     } = selectedConfig;
-
-    const tabs = (
-        <TabList>
-            <Tab
-                name="production"
-                className={styles.tab}
-            >
-                Staging
-            </Tab>
-            <Tab
-                name="alpha"
-                className={styles.tab}
-            >
-                Alpha
-            </Tab>
-            <Tab
-                name="custom"
-                className={styles.tab}
-            >
-                Custom
-            </Tab>
-        </TabList>
-    );
 
     const defaultForm: FormType = useMemo(() => ({
         webServer: otherConfig.webServerUrl,
@@ -201,135 +177,123 @@ function SourceSettings(props: Props) {
     );
 
     return (
-        <ContainerCard
-            className={_cs(className, styles.settingsBox)}
-            footerActions={(
-                <>
-                    <SmartButtonLikeLink
-                        className={styles.footerStyle}
-                        route={route.home}
-                        icons={(
-                            <IoArrowBackCircleSharp />
-                        )}
-                    >
-                        Back
-                    </SmartButtonLikeLink>
-                    <Button
-                        name={undefined}
-                        onClick={activeView === 'custom' ? handleCustomSubmit : handleFixedSubmit}
-                        disabled={pristine}
-                    >
-                        Save
-                    </Button>
-                </>
-            )}
+        <Tabs
+            value={activeView}
+            onChange={handleServerEnvironmentChange}
         >
-            <div>
-                <Tabs
-                    value={activeView}
-                    onChange={handleServerEnvironmentChange}
-                >
-                    <TabPanel name="production">
-                        <Card
-                            className={_cs(styles.alphaForm, className)}
-                            heading={tabs}
+            <Container
+                className={_cs(className, styles.settingsBox)}
+                headerClassName={styles.header}
+                headingContainerClassName={styles.heading}
+                heading={(
+                    <TabList>
+                        <Tab name="production">
+                            Staging
+                        </Tab>
+                        <Tab name="alpha">
+                            Alpha
+                        </Tab>
+                        <Tab name="custom">
+                            Custom
+                        </Tab>
+                    </TabList>
+                )}
+                footerActions={(
+                    <>
+                        <SmartButtonLikeLink
+                            className={styles.footerStyle}
+                            route={route.home}
+                            icons={(
+                                <IoArrowBackCircleSharp />
+                            )}
                         >
-                            <TextInput
-                                className={styles.input}
-                                label="Identifier"
-                                name="identifier"
-                                value={valueToShow.identifier}
-                                onChange={undefined}
-                                readOnly
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Web Server Address"
-                                name="webServer"
-                                value={valueToShow.webServer}
-                                onChange={undefined}
-                                readOnly
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Api Server Address"
-                                name="apiServer"
-                                value={valueToShow.apiServer}
-                                onChange={undefined}
-                                readOnly
-                            />
-                        </Card>
-                    </TabPanel>
-                    <TabPanel name="alpha">
-                        <Card
-                            className={_cs(styles.alphaForm, className)}
-                            heading={tabs}
+                            Back
+                        </SmartButtonLikeLink>
+                        <Button
+                            name={undefined}
+                            onClick={activeView === 'custom' ? handleCustomSubmit : handleFixedSubmit}
+                            disabled={pristine}
                         >
-                            <TextInput
-                                className={styles.input}
-                                label="Identifier"
-                                name="identifier"
-                                value={valueToShow.identifier}
-                                onChange={undefined}
-                                readOnly
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Web Server Address"
-                                name="webServer"
-                                value={valueToShow.webServer}
-                                onChange={undefined}
-                                readOnly
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Api Server Address"
-                                name="apiServer"
-                                value={valueToShow.apiServer}
-                                onChange={undefined}
-                                readOnly
-                            />
-                        </Card>
-                    </TabPanel>
-                    <TabPanel name="custom">
-                        <NonFieldError error={error} />
-                        <Card
-                            className={_cs(styles.alphaForm, className)}
-                            heading={tabs}
-                        >
-
-                            <TextInput
-                                className={styles.input}
-                                label="Identifier"
-                                name="identifier"
-                                value={valueToShow.identifier}
-                                onChange={setFieldValue}
-                                readOnly={disableInput}
-                                error={error?.identifier}
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Web Server Address"
-                                name="webServer"
-                                value={valueToShow.webServer}
-                                error={error?.webServer}
-                                onChange={setFieldValue}
-                                readOnly={disableInput}
-                            />
-                            <TextInput
-                                className={styles.input}
-                                label="Api Server Address"
-                                name="apiServer"
-                                value={valueToShow.apiServer}
-                                onChange={setFieldValue}
-                                readOnly={disableInput}
-                                error={error?.apiServer}
-                            />
-                        </Card>
-                    </TabPanel>
-                </Tabs>
-            </div>
-        </ContainerCard>
+                            Save
+                        </Button>
+                    </>
+                )}
+            >
+                <TabPanel name="production">
+                    <TextInput
+                        label="Identifier"
+                        name="identifier"
+                        value={valueToShow.identifier}
+                        onChange={undefined}
+                        readOnly
+                    />
+                    <TextInput
+                        label="Web Server Address"
+                        name="webServer"
+                        value={valueToShow.webServer}
+                        onChange={undefined}
+                        readOnly
+                    />
+                    <TextInput
+                        label="Api Server Address"
+                        name="apiServer"
+                        value={valueToShow.apiServer}
+                        onChange={undefined}
+                        readOnly
+                    />
+                </TabPanel>
+                <TabPanel name="alpha">
+                    <TextInput
+                        label="Identifier"
+                        name="identifier"
+                        value={valueToShow.identifier}
+                        onChange={undefined}
+                        readOnly
+                    />
+                    <TextInput
+                        label="Web Server Address"
+                        name="webServer"
+                        value={valueToShow.webServer}
+                        onChange={undefined}
+                        readOnly
+                    />
+                    <TextInput
+                        label="Api Server Address"
+                        name="apiServer"
+                        value={valueToShow.apiServer}
+                        onChange={undefined}
+                        readOnly
+                    />
+                </TabPanel>
+                <TabPanel name="custom">
+                    <NonFieldError error={error} />
+                    <TextInput
+                        label="Identifier"
+                        name="identifier"
+                        value={valueToShow.identifier}
+                        onChange={setFieldValue}
+                        readOnly={disableInput}
+                        error={error?.identifier}
+                    />
+                    <TextInput
+                        label="Web Server Address"
+                        name="webServer"
+                        value={valueToShow.webServer}
+                        error={error?.webServer}
+                        onChange={setFieldValue}
+                        readOnly={disableInput}
+                    />
+                    <TextInput
+                        label="Api Server Address"
+                        name="apiServer"
+                        value={valueToShow.apiServer}
+                        onChange={setFieldValue}
+                        readOnly={disableInput}
+                        error={error?.apiServer}
+                    />
+                </TabPanel>
+            </Container>
+        </Tabs>
     );
 }
 

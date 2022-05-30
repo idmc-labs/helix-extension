@@ -1,0 +1,23 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .parking-lot-box {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            gap: var(--tui-spacing-extra-small);
+        }
+    }
+}
+
+.message-box {
+    display: flex;
+    justify-content: center;
+}

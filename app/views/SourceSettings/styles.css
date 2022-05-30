@@ -1,0 +1,19 @@
+.settings-box {
+    width: 100vw;
+    height: 90vh;
+    --width-preview: 560px;
+
+    .header {
+        border-bottom: none;
+        padding: 0;
+
+        .heading {
+            border-bottom: var(--tui-width-separator-thin) solid var(--tui-color-separator);
+            padding: 0;
+        }
+    }
+
+    .footer-style {
+        color: var(--color-foreground);
+    }
+}

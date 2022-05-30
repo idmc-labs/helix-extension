@@ -1,0 +1,8 @@
+.message-box {
+    display: flex;
+    justify-content: center;
+}
+
+.footer-style {
+    color: var(--color-foreground);
+}

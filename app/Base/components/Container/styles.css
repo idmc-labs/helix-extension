@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+
+    &:not(.compact) {
+        background-color: var(--color-foreground);
+        padding: calc(var(--spacing-large) - var(--spacing-medium));
+    }
+
+    .compact-header {
+        border-bottom-color: transparent;
+    }
+
+    .header {
+        flex-shrink: 0;
+    }
+
+    .description {
+        flex-shrink: 0;
+    }
+
+    .content {
+        flex-grow: 1;
+        padding: var(--spacing-medium);
+        overflow: auto;
+    }
+
+    .footer {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: flex-end;
+    }
+}

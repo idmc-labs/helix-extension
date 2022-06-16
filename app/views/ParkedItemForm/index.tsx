@@ -131,7 +131,6 @@ type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
 const schema: FormSchema = {
     fields: (): FormSchemaFields => ({
-        id: [requiredCondition],
         country: [requiredCondition],
         title: [requiredStringCondition],
         url: [requiredCondition, urlCondition],
@@ -176,7 +175,6 @@ function ParkedItemForm(props: ParkedItemFormProps) {
 
     const defaultFormValues: PartialForm<FormType> = {
         status: toBeReviewed,
-        id: undefined,
         country: undefined,
         title: undefined,
         url: undefined,

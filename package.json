@@ -1,7 +1,7 @@
 {
     "name": "helix-extension",
     "version": "1.0.0",
-    "description": "Base React Application",
+    "description": "Helix extension",
     "scripts": {
         "generate": "env-cmd -f .env graphql-codegen --config codegen.yml",
         "lint": "eslint ./app --report-unused-disable-directives",
@@ -23,15 +23,15 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/togglecorp/base-react-app.git"
+        "url": "git+https://github.com/idmc-labs/helix-extension.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/togglecorp/base-react-app/issues"
+        "url": "https://github.com/idmc-labs/helix-extension/issues"
     },
-    "homepage": "https://github.com/togglecorp/base-react-app#readme",
+    "homepage": "https://github.com/idmc-labs/helix-extension#readme",
     "dependencies": {
         "@apollo/client": "^3.3.21",
         "@sentry/react": "^6.9.0",

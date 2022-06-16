@@ -1,4 +1,3 @@
-# base-react-app
+# Helix Extension
 
-Base React Application
-
+Github repository of helix extension

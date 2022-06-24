@@ -22,28 +22,35 @@ function getPath(value) {
 }
 
 const gitRevisionPlugin = new GitRevisionPlugin();
+const isProduction = process.env.NODE_ENV === 'production';
 
 const base = {
-    manifest_version: 2,
-    browser_action: {
+    manifest_version: 3,
+    action: {
         default_popup: 'index.html',
     },
-    content_security_policy: "script-src 'self' 'unsafe-eval'; object-src 'self';",
+    host_permissions: [
+        '<all_urls>',
+        'https://*.idmcdb.org/',
+        isProduction ? undefined : 'http://localhost:*/',
+    ].filter(Boolean),
     permissions: [
-        'storage',
         'cookies',
         'activeTab',
-        'tabs',
-        '<all_urls>',
     ],
     icons: {
         32: 'icons/logo-32.png',
         64: 'icons/logo-64.png',
         128: 'icons/logo-128.png',
     },
-};
+    externally_connectable: {
+        matches: [
+            '*://*.idmcdb.org/*',
+            isProduction ? undefined : '*://localhost:*/*',
+        ].filter(Boolean),
+    },
 
-const isProduction = process.env.NODE_ENV === 'production';
+};
 
 module.exports = () => {
     const config = {
@@ -53,7 +60,7 @@ module.exports = () => {
             : 'development',
         devtool: isProduction
             ? 'source-map'
-            : 'eval-cheap-source-map',
+            : 'cheap-module-source-map',
         entry: getPath('app/index.tsx'),
         node: false,
         resolve: {
@@ -82,11 +89,6 @@ module.exports = () => {
                     include: getPath('app/'),
                     exclude: /node_modules/,
                     loader: 'babel-loader',
-                    options: {
-                        plugins: [
-                            !isProduction && require.resolve('react-refresh/babel'),
-                        ].filter(Boolean),
-                    },
                 },
                 {
                     test: /\.css$/,
@@ -256,8 +258,6 @@ module.exports = () => {
                 port: 3080,
                 watchContentBase: true,
                 overlay: true,
-                hot: true,
-                liveReload: false,
                 historyApiFallback: true,
                 watchOptions: {
                     ignored: /node_modules/,
@@ -265,10 +265,7 @@ module.exports = () => {
                 clientLogLevel: 'none',
                 publicPath: '/',
             },
-            plugins: [
-                new HotModuleReplacementPlugin(),
-                new ReactRefreshWebpackPlugin(),
-            ],
+            plugins: [],
             /*
             // TODO: enable this later
             experiments: {

@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { productionValues, alphaValues } from '#base/utils/apollo';
 
 export type ActiveConfig = 'production' | 'alpha' | 'custom';
 
@@ -13,19 +14,6 @@ export interface ServerContextInterface {
     selectedConfig: SelectedConfigType;
     setSelectedConfig: React.Dispatch<React.SetStateAction<SelectedConfigType>>;
 }
-
-// FIXME: move these somewhere else
-export const productionValues: Omit<SelectedConfigType, 'activeConfig'> = {
-    webServerUrl: 'https://https://helix-nightly.idmcdb.org',
-    apiServerUrl: 'https://api.nightly.helix.idmcdb.org',
-    identifier: 'development',
-};
-
-export const stagingValues: Omit<SelectedConfigType, 'activeConfig'> = {
-    webServerUrl: 'https://helix-alpha.idmcdb.org',
-    apiServerUrl: 'https://api.alpha.helix.idmcdb.org',
-    identifier: 'alpha',
-};
 
 export const defaultServerConfig: SelectedConfigType = {
     activeConfig: 'production',
@@ -50,7 +38,7 @@ export function getConfig(): Omit<SelectedConfigType, 'activeConfig'> {
         return productionValues;
     }
     if (currentConfigMode === 'alpha') {
-        return stagingValues;
+        return alphaValues;
     }
     return defaultServerConfig;
 }

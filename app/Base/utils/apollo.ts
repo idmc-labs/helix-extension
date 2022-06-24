@@ -12,9 +12,9 @@ export function checkErrorCode(errors: ApolloError['graphQLErrors'], path: (stri
 }
 
 export const productionValues = {
-    webServer: 'https://helix-nightly.idmcdb.org',
-    apiServer: 'https://api.nightly.helix.idmcdb.org',
-    identifier: 'staging',
+    webServer: 'https://helix-app.idmcdb.org',
+    apiServer: 'https://api.helix.idmcdb.org',
+    identifier: 'production',
 };
 
 export const alphaValues = {

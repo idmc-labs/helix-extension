@@ -6,7 +6,7 @@
     ],
     "plugins": [
         // Reuse babel"s injected headers
-        "@babel/plugin-transform-runtime",
+        // "@babel/plugin-transform-runtime",
 
         // Handle absolute imports
         ["babel-plugin-module-resolver", {

@@ -10,7 +10,7 @@ import { getConfig } from '#base/context/ServerContext';
 
 const config = getConfig();
 
-const GRAPHQL_ENDPOINT = `${config.apiServerUrl}/graphql`;
+const GRAPHQL_ENDPOINT = `${config.apiServer}/graphql`;
 
 const link = new HttpLink({
     uri: GRAPHQL_ENDPOINT,

@@ -24,17 +24,16 @@ import route from '#base/configs/routes';
 import {
     ServerContext,
 } from '#base/context/ServerContext';
-import { productionValues, alphaValues } from '#base/utils/apollo';
+import { productionValues, stagingValues } from '#base/utils/apollo';
 import Container from '#base/components/Container';
 import SmartButtonLikeLink from '#base/components/SmartButtonLikeLink';
 import NonFieldError from '#components/NonFieldError';
 
 import styles from './styles.css';
 
-type ConfigKeys = 'production' | 'alpha' | 'custom';
+type ConfigKeys = 'production' | 'staging' | 'custom';
 
 type ServerConfigFields = {
-    webServer: string;
     apiServer: string;
     identifier: string;
 }
@@ -44,16 +43,14 @@ type FormSchemaFields = ReturnType<FormSchema['fields']>;
 
 const schema: FormSchema = {
     fields: (value): FormSchemaFields => {
-        if (value?.identifier !== 'alpha' && value?.identifier !== 'production') {
+        if (value?.identifier !== 'staging' && value?.identifier !== 'production') {
             return ({
                 identifier: [requiredStringCondition],
-                webServer: [requiredStringCondition, urlCondition],
                 apiServer: [requiredStringCondition, urlCondition],
             });
         }
         return {
             identifier: [],
-            webServer: [],
             apiServer: [],
         };
     },
@@ -78,8 +75,7 @@ function SourceSettings(props: Props) {
     } = selectedConfig;
 
     const defaultForm: FormType = useMemo(() => ({
-        webServer: otherConfig.webServerUrl,
-        apiServer: otherConfig.apiServerUrl,
+        apiServer: otherConfig.apiServer,
         identifier: otherConfig.identifier,
     }), [otherConfig]);
 
@@ -111,8 +107,7 @@ function SourceSettings(props: Props) {
                     const data = { ...val } as FormType;
                     setSelectedConfig({
                         activeConfig: activeView,
-                        webServerUrl: data.webServer,
-                        apiServerUrl: data.apiServer,
+                        apiServer: data.apiServer,
                         identifier: data.identifier,
                     });
                 },
@@ -132,8 +127,7 @@ function SourceSettings(props: Props) {
     const handleFixedSubmit = useCallback(() => {
         setSelectedConfig({
             activeConfig: activeView,
-            webServerUrl: otherConfig.webServerUrl,
-            apiServerUrl: otherConfig.apiServerUrl,
+            apiServer: otherConfig.apiServer,
             identifier: otherConfig.identifier,
         });
         history.push(route.settingsSuccessForm.path);
@@ -149,15 +143,13 @@ function SourceSettings(props: Props) {
             if (activeView === 'production') {
                 return {
                     identifier: productionValues.identifier,
-                    webServer: productionValues.webServer,
                     apiServer: productionValues.apiServer,
                 };
             }
-            if (activeView === 'alpha') {
+            if (activeView === 'staging') {
                 return {
-                    identifier: alphaValues.identifier,
-                    webServer: alphaValues.webServer,
-                    apiServer: alphaValues.apiServer,
+                    identifier: stagingValues.identifier,
+                    apiServer: stagingValues.apiServer,
                 };
             }
             return value;
@@ -188,10 +180,10 @@ function SourceSettings(props: Props) {
                 heading={(
                     <TabList>
                         <Tab name="production">
-                            Staging
+                            Production
                         </Tab>
-                        <Tab name="alpha">
-                            Alpha
+                        <Tab name="staging">
+                            Staging
                         </Tab>
                         <Tab name="custom">
                             Custom
@@ -228,13 +220,6 @@ function SourceSettings(props: Props) {
                         readOnly
                     />
                     <TextInput
-                        label="Web Server Address"
-                        name="webServer"
-                        value={valueToShow.webServer}
-                        onChange={undefined}
-                        readOnly
-                    />
-                    <TextInput
                         label="Api Server Address"
                         name="apiServer"
                         value={valueToShow.apiServer}
@@ -242,18 +227,11 @@ function SourceSettings(props: Props) {
                         readOnly
                     />
                 </TabPanel>
-                <TabPanel name="alpha">
+                <TabPanel name="staging">
                     <TextInput
                         label="Identifier"
                         name="identifier"
                         value={valueToShow.identifier}
-                        onChange={undefined}
-                        readOnly
-                    />
-                    <TextInput
-                        label="Web Server Address"
-                        name="webServer"
-                        value={valueToShow.webServer}
                         onChange={undefined}
                         readOnly
                     />
@@ -274,14 +252,6 @@ function SourceSettings(props: Props) {
                         onChange={setFieldValue}
                         readOnly={disableInput}
                         error={error?.identifier}
-                    />
-                    <TextInput
-                        label="Web Server Address"
-                        name="webServer"
-                        value={valueToShow.webServer}
-                        error={error?.webServer}
-                        onChange={setFieldValue}
-                        readOnly={disableInput}
                     />
                     <TextInput
                         label="Api Server Address"

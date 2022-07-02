@@ -35,7 +35,6 @@ const base = {
         isProduction ? undefined : 'http://localhost:*/',
     ].filter(Boolean),
     permissions: [
-        'cookies',
         'activeTab',
     ],
     icons: {

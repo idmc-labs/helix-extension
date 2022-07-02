@@ -1,12 +1,11 @@
 import { createContext } from 'react';
-import { productionValues, alphaValues } from '#base/utils/apollo';
+import { productionValues, stagingValues } from '#base/utils/apollo';
 
-export type ActiveConfig = 'production' | 'alpha' | 'custom';
+export type ActiveConfig = 'production' | 'staging' | 'custom';
 
 export interface SelectedConfigType {
     activeConfig: ActiveConfig;
-    webServerUrl?: string;
-    apiServerUrl?: string;
+    apiServer?: string;
     identifier?: string;
 }
 
@@ -37,8 +36,8 @@ export function getConfig(): Omit<SelectedConfigType, 'activeConfig'> {
     if (currentConfigMode === 'production') {
         return productionValues;
     }
-    if (currentConfigMode === 'alpha') {
-        return alphaValues;
+    if (currentConfigMode === 'staging') {
+        return stagingValues;
     }
     return defaultServerConfig;
 }

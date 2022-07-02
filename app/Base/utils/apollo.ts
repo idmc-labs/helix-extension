@@ -12,13 +12,11 @@ export function checkErrorCode(errors: ApolloError['graphQLErrors'], path: (stri
 }
 
 export const productionValues = {
-    webServer: 'https://helix-app.idmcdb.org',
-    apiServer: 'https://api.helix.idmcdb.org',
+    apiServer: 'https://api.helix.tools.idmcdb.org',
     identifier: 'production',
 };
 
-export const alphaValues = {
-    webServer: 'https://helix-alpha.idmcdb.org',
-    apiServer: 'https://api.alpha.helix.idmcdb.org',
-    identifier: 'alpha',
+export const stagingValues = {
+    apiServer: 'https://api.helix-staging.tools.idmcdb.org',
+    identifier: 'staging',
 };

@@ -1,6 +1,6 @@
 {
     "name": "helix-extension",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Helix extension",
     "scripts": {
         "generate": "env-cmd -f .env graphql-codegen --config codegen.yml",
